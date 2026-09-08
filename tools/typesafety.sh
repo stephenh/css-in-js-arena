@@ -36,9 +36,13 @@ echo "=== Typo a colour token: accent -> acent ==="
 probe bamboo app/ui.ts 'color: "accent",' 'color: "acent",'
 probe panda  app/ui.ts 'color: "accent",' 'color: "acent",'
 probe stylex app/ui.ts 'color: t.accent,' 'color: t.acent,'
+probe truss  app/ui.ts '.accent.fw6' '.acent.fw6'
 
 echo
 echo "=== Typo a CSS property: paddingBlock -> padingBlock ==="
 probe bamboo app/ui.ts 'paddingBlock: "8px",' 'padingBlock: "8px",'
 probe panda  app/ui.ts 'paddingBlock: "8px",' 'padingBlock: "8px",'
 probe stylex app/ui.ts 'paddingBlock: 8,' 'padingBlock: 8,'
+# Truss spells the common properties as abbreviations; `add()` is where a
+# property name is typed out, so that is where the typo goes.
+probe truss  app/ui.ts 'add("letterSpacing", "0.005em")' 'add("leterSpacing", "0.005em")'

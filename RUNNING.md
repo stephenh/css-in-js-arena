@@ -11,6 +11,7 @@ Each engine gets a port pair by its index in `tools/engines.json` — `300N` for
 | Bamboo CSS | `@bamboocss/vite` | 3001 | 4001 |
 | StyleX | `@stylexjs/unplugin` | 3002 | 4002 |
 | Panda CSS | `@pandacss/postcss` | 3003 | 4003 |
+| Truss | `@homebound/truss/plugin` | 3004 | 4004 |
 
 `tools/engines.json` is the single source of truth for that list. Adding an engine is a checklist —
 see [`CLAUDE.md`](./CLAUDE.md).
@@ -40,6 +41,7 @@ One terminal per engine, each on its assigned port:
 cd apps/bamboo && PORT=3001 npm start
 cd apps/stylex && PORT=3002 npm start
 cd apps/panda  && PORT=3003 npm start
+cd apps/truss  && PORT=3004 npm start
 ```
 
 ## Verify parity — the gate
@@ -49,7 +51,7 @@ cd apps/panda  && PORT=3003 npm start
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
@@ -60,7 +62,7 @@ worst case of ≈0.047% — that residual is the footer credit line, which diffe
 Two things that are easy to get wrong:
 
 - `layout-diff.mjs` takes the challenger as its **fourth** argument and defaults to `stylex`. A loop
-  without it never geometry-checks Panda at all.
+  without it never geometry-checks Panda or Truss at all.
 - Both tools freeze CSS animations before measuring, because `getBoundingClientRect()` reports the
   transformed box and `/lab` animates. Without that the gate fails at random.
 
@@ -79,7 +81,7 @@ node unused.mjs     # class rules that can never apply
 Kill the servers first; CPU contention skews the timings.
 
 ```bash
-lsof -ti:3001,3002,3003 | xargs kill
+lsof -ti:3001,3002,3003,3004 | xargs kill
 
 cd tools
 RUNS=5 ./timings.sh   # production build, cold and warm
@@ -133,10 +135,14 @@ sample lands wherever the cluster mix happens to fall.
 node hmr-payload.mjs bamboo 4001     # bytes the browser refetches — needs a server you started
 ```
 
+Truss's dev runtime refetches the whole stylesheet from `/virtual:truss.css` on every update, and once
+more 50 ms after Vite's `afterUpdate` event, so its payload carries two stylesheet responses per edit.
+
 `hmr-payload.mjs` still wants a dev server you start yourself, and is deterministic **once it has
-finished warming** — give it ~10s after the port answers and take the second measurement, not the
-first. Measured too early it reports an inflated payload and an extra response (StyleX has been seen
-at 392 KB · 11 instead of its stable 356 KB · 10). If two consecutive runs agree, the number is real.
+finished warming** — give it ~10s after the port answers and take the number two consecutive runs
+agree on, not the first. Measured too early it can report a different payload and response count
+(StyleX and Truss have both been seen one response apart between the first and second run). If two
+consecutive runs agree, the number is real.
 
 `hmr-trace.mjs` is the underlying instrument and can be run directly on one engine for the full
 per-run detail — every websocket message, every module refetch, head mutations:
@@ -196,10 +202,11 @@ trust a result:
 
 ```bash
 git status                                        # clean apart from README.md
-grep -rnw "acent\|padingBlock" apps/*/app/ui.ts   # must return nothing
+grep -rnw "acent\|padingBlock\|leterSpacing" apps/*/app/ui.ts   # must return nothing
 ls apps/*/app/__scale.ts 2>/dev/null              # generated module must be gone
 ls apps/*/app/__orphan.ts 2>/dev/null             # ditto
 find apps/*/styled-system/themes -type f          # no leftover theme artifacts
+grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
 ```
 
 Rebuild each app afterwards too. An interrupted probe can leave `build/` holding a stylesheet that no

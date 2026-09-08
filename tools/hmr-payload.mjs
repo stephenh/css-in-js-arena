@@ -25,6 +25,11 @@ const C = {
     from: `pageTitle: { fontSize: 25,`,
     to: `pageTitle: { fontSize: 41,`,
   },
+  truss: {
+    file: `${ROOT}apps/truss/app/ui.ts`,
+    from: `export const pageTitle = Css.fsPx(25)`,
+    to: `export const pageTitle = Css.fsPx(41)`,
+  },
 }[app];
 
 const original = readFileSync(C.file, "utf8");

@@ -24,6 +24,12 @@ caveat, state the caveat as a present fact.
 `apps/bamboo` is the **reference app**. Every other app is diffed against it, so all apps match each
 other transitively.
 
+`apps/truss` carries one piece of app-level glue, `truss-ssr.ts`: Truss's Vite plugin links its
+stylesheet through `index.html`, which a React Router app does not have, so that plugin exposes the
+emitted CSS as `virtual:truss.css` and keeps `.css.ts` imports out of Vite's CSS pipeline. The
+generated `app/Css.ts` and `app/Css.json` are committed, as Truss recommends; `npm run codegen`
+regenerates them after a `truss-config.ts` change.
+
 ## The one rule
 
 **Every comparison run must end by updating the results tables in `README.md`.**
@@ -81,6 +87,7 @@ Each on its assigned port (`300N` by engine index):
 cd apps/bamboo && PORT=3001 npm start &
 cd apps/stylex && PORT=3002 npm start &
 cd apps/panda  && PORT=3003 npm start &
+cd apps/truss  && PORT=3004 npm start &
 ```
 
 ### 3. Verify parity — gate
@@ -88,13 +95,13 @@ cd apps/panda  && PORT=3003 npm start &
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
 
 Note the fourth argument: `layout-diff.mjs` defaults to `stylex`, so a loop without it never
-geometry-checks Panda at all.
+geometry-checks Panda or Truss at all.
 
 `layout-diff.mjs` freezes animations before it probes. `getBoundingClientRect()` reports the
 *transformed* box, so `/lab`'s spinner and pulsing dot otherwise make the geometry depend on which
@@ -117,7 +124,7 @@ node unused.mjs       # class rules that can never apply
 Kill the servers first; CPU contention skews timings.
 
 ```bash
-lsof -ti:3001,3002,3003 | xargs kill
+lsof -ti:3001,3002,3003,3004 | xargs kill
 RUNS=5 ./timings.sh   # production build, cold and warm
 RUNS=3 ./devstart.sh  # dev server cold start
 ./deadcode.sh         # delete a page, see what happens to the CSS
@@ -268,8 +275,9 @@ flip config flags. They restore afterwards, but always confirm before finishing:
 
 ```bash
 git status                                        # clean apart from README.md
-grep -rnw "acent\|padingBlock" apps/*/app/ui.ts   # must return nothing (-w: "adjacent" is not a hit)
+grep -rnw "acent\|padingBlock\|leterSpacing" apps/*/app/ui.ts   # must return nothing (-w: "adjacent" is not a hit)
 grep -rn "tools/theming.mjs" apps/*/app/          # generated themes must be gone
+grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
 ls apps/*/app/__scale.ts 2>/dev/null                # scale.mjs module must be gone
 ls apps/*/app/__orphan.ts 2>/dev/null               # orphan.mjs module must be gone
 ls -d apps/*/app/__devscale 2>/dev/null             # dev-scale.mjs module tree must be gone
