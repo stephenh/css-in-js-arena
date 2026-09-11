@@ -106,7 +106,7 @@ It reports the edit as **phases**, not one number, because one number was measur
 
 | phase | what it is |
 | --- | --- |
-| `write → ws` | the dev server's own reaction, up to the HMR broadcast. The only phase attributable to the engine alone. |
+| `write → ws` | the dev server's own reaction, up to the HMR broadcast that carries an update payload. The only phase attributable to the engine alone. |
 | `write → rule live` | the new rule is live in the document |
 | `write → JS re-executed` | the edited module re-ran and React re-rendered |
 | `write → correct paint` | the target computes the value that was written — true end to end |
@@ -125,6 +125,14 @@ is wrong twice over, and both are visible in the tool's own output:
 `write → ws` comes from a bare `vite-hmr` websocket with no browser attached. Taken through the
 trace instead — browser open, CDP poll running — the same figure moves 3–10× sweep to sweep, so the
 tool measures it separately and reports the socket number.
+
+The probe counts only a message carrying `"type":"update"` (or `"full-reload"`), not a bare custom
+event. An engine can broadcast "the CSS changed, go refetch" the moment the watcher fires, before it
+has compiled anything, and the stylesheet the browser then refetches still holds the old rule.
+StyleX's component edit pings that way at ~3 ms while its real update lands ~110 ms later and its
+rule goes live at ~250 ms; Truss did the same until 2.29.12. Counting only an update payload makes
+every engine's number the same event. `hmr-trace.mjs` still prints every message, so the pings are
+visible when you want them.
 
 **Bamboo's `write → ws` is bimodal**: roughly a fifth of runs land near 25 ms and most of the rest
 near 125 ms. StyleX's component edit splits the same way, between ~10 ms and ~90 ms. Pool at least

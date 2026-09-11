@@ -159,7 +159,9 @@ Both faults stay visible in the tool's own `(flash → correct)` and `which sign
 keep them, they are the audit that the axis is still measuring what it claims.
 
 Only `write → ws` is attributable to the engine alone. It comes from a bare `vite-hmr` websocket
-with no browser attached; taken through the trace it moves 3–10× sweep to sweep. **Bamboo's is
+with no browser attached; taken through the trace it moves 3–10× sweep to sweep. It counts only a
+message carrying an update payload — a bare "go refetch the CSS" custom event can fire before the
+engine has compiled anything, which made the row compare different events between engines. **Bamboo's is
 bimodal** — about a third of runs near 35 ms, the rest near 125 ms — so pool at least 20 runs before
 reading it. A 7-run median lands wherever the cluster mix falls and will invent a trend that is not
 there.
