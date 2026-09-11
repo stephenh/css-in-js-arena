@@ -1,5 +1,4 @@
-import { Css } from "~/Css";
-import type { Properties } from "~/Css";
+import { Css, type Properties } from "~/Css";
 
 /**
  * Shared UI primitives. Truss has no recipe API, so anything with discrete

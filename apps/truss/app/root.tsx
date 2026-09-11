@@ -10,8 +10,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import { Css } from "~/Css";
-import type { Properties } from "~/Css";
+import { Css, type Properties } from "~/Css";
 import "./reset.css";
 import "./theme.css";
 import "virtual:truss.css";

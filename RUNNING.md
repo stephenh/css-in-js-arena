@@ -138,6 +138,12 @@ node hmr-payload.mjs bamboo 4001     # bytes the browser refetches — needs a s
 Truss's dev runtime refetches the whole stylesheet from `/virtual:truss.css` on every update, and once
 more 50 ms after Vite's `afterUpdate` event, so its payload carries two stylesheet responses per edit.
 
+Truss's dev server also never prunes a rule once it has emitted it. `hmr-trace.mjs` relies on every edit
+producing a class that has never existed, so on a Truss server that has already seen a value (the
+`write → ws` runs use the same values the trace does) the rule is live before the write and the
+`cssLive` reading comes back empty. Restart the dev server before a trace whose rule-live column
+matters.
+
 `hmr-payload.mjs` still wants a dev server you start yourself, and is deterministic **once it has
 finished warming** — give it ~10s after the port answers and take the number two consecutive runs
 agree on, not the first. Measured too early it can report a different payload and response count

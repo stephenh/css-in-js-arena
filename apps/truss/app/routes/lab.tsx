@@ -1,5 +1,4 @@
-import { Css } from "~/Css";
-import type { Properties } from "~/Css";
+import { Css, type Properties } from "~/Css";
 import "./lab.css";
 import { pipelineTracks, regions, runLog, runStateLabels } from "../data";
 import { card, cardHead, cardNote, cardTitle, pageHead, pageSub, pageTitle, sectionNote, sectionTitle, stack } from "../ui";
