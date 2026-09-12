@@ -68,6 +68,13 @@ export type CssSetVarValue = CssSetVarScalar | {
   container?: Array<{ name?: string; gt?: number; lt?: number; value: CssSetVarScalar }>;
 };
 
+export enum Keyframes {
+  Spin = "spin",
+  Pulse = "pulse",
+  Shimmer = "shimmer",
+  Sweep = "sweep",
+}
+
 // Augment React types so all JSX elements accept the `css` prop:
 // - HTMLAttributes/SVGAttributes cover intrinsic elements (div, svg, etc.)
 // - JSX.IntrinsicAttributes covers custom components (Card, Page, etc.)

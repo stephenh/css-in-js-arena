@@ -125,6 +125,25 @@ const sections = {
   ],
 };
 
+// Motion for the /lab route. Declared in the config rather than as raw blocks
+// in a `.css.ts` so Truss owns the name: it type-checks the animations that
+// reference it and writes the block only while one still does.
+const keyframes = {
+  spin: { to: { transform: "rotate(360deg)" } },
+  pulse: {
+    "0%, 100%": { opacity: "1", transform: "scale(1)" },
+    "50%": { opacity: "0.45", transform: "scale(0.82)" },
+  },
+  shimmer: {
+    from: { backgroundPosition: "200% 0" },
+    to: { backgroundPosition: "-200% 0" },
+  },
+  sweep: {
+    from: { transform: "rotate(0deg)" },
+    to: { transform: "rotate(360deg)" },
+  },
+};
+
 export default defineConfig({
   outputPath: "./app/Css.ts",
   palette,
@@ -134,5 +153,6 @@ export default defineConfig({
   increment: 8,
   numberOfIncrements: 4,
   breakpoints,
+  keyframes,
   sections,
 });

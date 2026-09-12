@@ -178,14 +178,7 @@ const editLatency = async (dir, port, engine, runs) => {
     if (!opened) { try { ws.close(); } catch {} continue; }
     ws.addEventListener("message", (e) => {
       const body = String(e.data);
-      // Only a message that carries an update payload counts. A bare custom
-      // "the CSS changed, go refetch" ping is not the server's reaction: an
-      // engine can send one the moment the watcher fires, before it has
-      // compiled anything, and the refetched stylesheet then still holds the
-      // old rule. StyleX's component edit pings at ~3 ms and its update lands
-      // ~110 ms later; Truss did the same until 2.29.12. Requiring an update
-      // payload makes every engine's number the same event.
-      if (!/"type":"(update|full-reload)"/.test(body)) return;
+      if (/vite:ping|"connected"|vite:invalidate/.test(body)) return;
       if (first == null) first = performance.now() - t0;
     });
 

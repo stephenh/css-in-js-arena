@@ -1,4 +1,4 @@
-import { Css, type Properties } from "~/Css";
+import { Css, Keyframes, type Properties } from "~/Css";
 import "./lab.css";
 import { pipelineTracks, regions, runLog, runStateLabels } from "../data";
 import { card, cardHead, cardNote, cardTitle, pageHead, pageSub, pageTitle, sectionNote, sectionTitle, stack } from "../ui";
@@ -42,13 +42,13 @@ const motionItem = Css.df.fdc.aic.gapPx(8).f11_5.muted.$;
 
 const spinner = Css.sqPx(22)
   .brPill.bss.bw2.bcBorder.add("borderTopColor", "var(--accent)")
-  .animation("spin 0.8s linear infinite").$;
+  .animation(`${Keyframes.Spin} 0.8s linear infinite`).$;
 
-const pulseDot = Css.sqPx(12).brPill.bgSuccess.animation("pulse 1.4s ease-in-out infinite").$;
+const pulseDot = Css.sqPx(12).brPill.bgSuccess.animation(`${Keyframes.Pulse} 1.4s ease-in-out infinite`).$;
 
 const sweepRing = Css.sqPx(24)
   .brPill.add("background", "conic-gradient(from 0deg, var(--accent), transparent 70%)")
-  .animation("sweep 1.6s linear infinite").$;
+  .animation(`${Keyframes.Sweep} 1.6s linear infinite`).$;
 
 const trackList = Css.df.fdc.gapPx(12).ptPx(4).pbPx(18).pxPx(18).$;
 
@@ -57,7 +57,7 @@ const trackLabel = Css.wPx(78).muted.$;
 
 const trackBar = Css.relative.f1.hPx(8).brPill.bgSurface3.oh.$;
 
-const trackFill = Css.h100.brPill.shimmerGradient.add("backgroundSize", "200% 100%").animation("shimmer 2.2s linear infinite").$;
+const trackFill = Css.h100.brPill.shimmerGradient.add("backgroundSize", "200% 100%").animation(`${Keyframes.Shimmer} 2.2s linear infinite`).$;
 
 /* -----------------------------------------------------------------------------
  * 3. Container queries

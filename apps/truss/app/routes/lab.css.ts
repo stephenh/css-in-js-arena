@@ -20,21 +20,4 @@ export const css = {
   // Matches `th` as well as `td`, so the numeric headers align with their columns.
   ".runTable [data-numeric='true']": Css.tar.add("fontVariantNumeric", "tabular-nums").muted.$,
   ".runTable tbody tr:hover td": Css.bgSurface3.$,
-
-  // Motion. Truss has no keyframes API; the blocks are raw CSS in the same file.
-  "@keyframes spin": Css.raw`
-    to { transform: rotate(360deg); }
-  `,
-  "@keyframes pulse": Css.raw`
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.82); }
-  `,
-  "@keyframes shimmer": Css.raw`
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
-  `,
-  "@keyframes sweep": Css.raw`
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  `,
 };

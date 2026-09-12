@@ -9,26 +9,26 @@ pixel-identical before anything is measured.
 | [Bamboo CSS](https://bamboocss.com) | `@bamboocss/vite` | 1.55.0 |
 | [StyleX](https://stylexjs.com) | `@stylexjs/unplugin` | 0.19.0 |
 | [Panda CSS](https://panda-css.com) | `@pandacss/postcss` | 1.12.0 |
-| [Truss](https://github.com/homebound-team/truss) | `@homebound/truss/plugin` | 2.29.12 |
+| [Truss](https://github.com/homebound-team/truss) | `@homebound/truss/plugin` | 2.30.0 |
 
-Measured 2026-09-11 · Linux, Node 26.8, Vite 8.2.2
+Measured 2026-09-12 · Linux, Node 26.8, Vite 8.2.2
 
 | Engine | Shipped bytes | Build & dev | Authoring | Correctness & maintenance | Rows won 🏆 |
 | --- | --- | --- | --- | --- | --- |
-| Bamboo | 4 / 11 | 1 / 7 | **7** / 9 🏆 | **4** / 4 🏆 | 16 / 31 |
-| StyleX | 4 / 11 | 0 / 7 | 2 / 9 | 1 / 4 | 7 / 31 |
-| Panda | 1 / 11 | 2 / 7 | 6 / 9 | 1 / 4 | 10 / 31 |
-| **Truss** 🏆 | **10** / 11 🏆 | **6** / 7 🏆 | 6 / 9 | 3 / 4 | **25** / 31 🏆 |
+| Bamboo | 3 / 11 | 0 / 7 | **7** / 9 🏆 | **4** / 4 🏆 | 14 / 31 |
+| StyleX | 2 / 11 | 0 / 7 | 2 / 9 | 1 / 4 | 5 / 31 |
+| Panda | 1 / 11 | 1 / 7 | 6 / 9 | 1 / 4 | 9 / 31 |
+| **Truss** 🏆 | **11** / 11 🏆 | **6** / 7 🏆 | **7** / 9 🏆 | 3 / 4 | **27** / 31 🏆 |
 
 Axes are not equally weighted and two are unscored, so the tally is a scanning aid, not the
-judgement. **Truss ships by far the smallest stylesheet, builds and starts fastest, refetches the
-least on an edit, and now fails the build on a mistyped token; it takes the shipped-bytes and
-build-and-dev categories outright.** Bamboo remains the only engine that catches every mistake the
-arena throws and prunes the most CSS when a page is deleted, and it holds the authoring category on
-the strength of its selector and theming ergonomics. **What Truss trades for its lead is API
-surface**: keyframes, `@property` registration, themes and any selector a chain cannot express are
-raw CSS in `.css.ts` files, and a server-rendered app still needs a small plugin of its own to link
-the stylesheet at all.
+judgement. **Truss now wins every shipped-bytes row.** Its stylesheet is a third smaller than
+Bamboo's and it has the lowest marginal cost per declaration, so the lead holds as style volume
+grows rather than eroding. It also builds and starts fastest and refetches the least on an edit.
+**Bamboo is still the only engine that catches every mistake the arena throws**, and it prunes the
+most CSS when a page is deleted. **What Truss still trades away is API surface**: there is no
+variant construct beyond a plain function over spreads, and a server-rendered app needs a small
+plugin of its own to link the stylesheet at all. Panda answers a component edit faster than anyone,
+because its Vite-side JavaScript transform is a no-op.
 
 ---
 
@@ -37,44 +37,44 @@ the stylesheet at all.
 | Axis | Bamboo | StyleX | Panda | Truss 🏆 |
 | --- | --- | --- | --- | --- |
 | **Shipped bytes** | | | | |
-| Full first load | **105,605 B** 🏆 | **106,122 B** 🏆 | 112,835 B | **105,158 B** 🏆 |
-| CSS, brotli | 7,357 B | 7,008 B | 9,518 B | **5,751 B** 🏆 |
-| CSS, gzip | 8,627 B | 8,200 B | 11,489 B | **6,823 B** 🏆 |
-| CSS, raw | 43,420 B | 40,430 B | 54,007 B | **29,662 B** 🏆 |
-| CSS rules emitted *(not a quality axis)* | 463 | 467 | 532 | 459 |
-| Client JS, brotli | **92,712 B** 🏆 | **93,583 B** 🏆 | 97,778 B | **94,124 B** 🏆 |
-| SSR HTML, gzip, mean of 6 | 5,536 B | 5,531 B | 5,539 B | **5,283 B** 🏆 |
-| Class attribute bytes, raw | 93,036 B | **70,843 B** 🏆 | 92,738 B | 77,297 B |
-| Class attribute bytes, selector-heavy route | 11,728 B | 11,754 B | 11,685 B | **9,423 B** 🏆 |
+| Full first load | 105,605 B | 106,122 B | 112,835 B | **104,981 B** 🏆 |
+| CSS, brotli | 7,357 B | 7,008 B | 9,518 B | **5,688 B** 🏆 |
+| CSS, gzip | 8,627 B | 8,200 B | 11,489 B | **6,721 B** 🏆 |
+| CSS, raw | 43,420 B | 40,430 B | 54,007 B | **28,947 B** 🏆 |
+| CSS rules emitted *(not a quality axis)* | 463 | 467 | 532 | 458 |
+| Client JS, brotli | **92,712 B** 🏆 | **93,583 B** 🏆 | 97,778 B | **94,127 B** 🏆 |
+| SSR HTML, gzip, mean of 6 | 5,536 B | 5,531 B | 5,539 B | **5,166 B** 🏆 |
+| Class attribute bytes, raw | 93,036 B | 70,843 B | 92,738 B | **67,696 B** 🏆 |
+| Class attribute bytes, selector-heavy route | 11,728 B | 11,754 B | 11,685 B | **8,220 B** 🏆 |
 | Unreachable CSS shipped | **0 B** 🏆 | 344 B | n/a (runtime) | **0 B** 🏆 |
 | Orphan file in `include` (50 styles), imported by nothing | +2 B | **+0 B** 🏆 | +13,200 B | **+0 B** 🏆 (no `include`; compiles the bundle graph) |
 | Stylesheets emitted | **1** 🏆 | 2 (one unreferenced) | **1** 🏆 | **1** 🏆 (merged by the app's own plugin) |
 | **Build & dev** | | | | |
-| Production build, cold | 1,642 ms | 2,645 ms | 2,101 ms | **1,128 ms** 🏆 (codegen committed, not run per build) |
-| Production build, warm | 1,652 ms | 2,666 ms | 2,078 ms | **1,112 ms** 🏆 |
-| Dev server cold start | 1,887 ms | 1,857 ms | 1,755 ms | **1,184 ms** 🏆 |
+| Production build, cold | 1,634 ms | 2,679 ms | 2,104 ms | **1,157 ms** 🏆 (codegen committed, not run per build) |
+| Production build, warm | 1,658 ms | 2,693 ms | 2,129 ms | **1,160 ms** 🏆 |
+| Dev server cold start | 1,892 ms | 1,842 ms | 1,763 ms | **1,205 ms** 🏆 |
 | Shared edit → server reacts *(not measurable: no update payload reaches a browserless client)* | — | — | — | — |
-| Shared edit → correct paint | 171 ms | 128 ms | 140 ms | **68 ms** 🏆 |
-| Component edit → server reacts | 26 ms | 83 ms | **7 ms** 🏆 | 21 ms |
-| Component edit → correct paint | **127 ms** 🏆 | 243 ms | **116 ms** 🏆 | **117 ms** 🏆 |
-| HMR payload, one shared edit | 342 KB · 9 | 356 KB · 10 | 402 KB · 9 | **339 KB · 8** 🏆 |
+| Shared edit → correct paint | 166 ms | 127 ms | 141 ms | **71 ms** 🏆 |
+| Component edit → server reacts | 24 ms | 81 ms | **6 ms** 🏆 | 21 ms |
+| Component edit → correct paint | 130 ms | 243 ms | 124 ms | **116 ms** 🏆 |
+| HMR payload, one shared edit | 342 KB · 9 | 356 KB · 10 | 402 KB · 9 | **338 KB · 8** 🏆 |
 | **Authoring** | | | | |
-| Total lines written | 3,921 | 4,090 | 3,930 | **2,402** 🏆 (one line per style) |
+| Total lines written | 3,921 | 4,090 | 3,930 | **2,405** 🏆 (one line per style) |
 | Structural & relational selectors | **one rule on the container** 🏆 | class per cell, `last` in JS | **one rule on the container** 🏆 | **one rule on the container** 🏆 (in a `.css.ts`) |
 | Next-sibling selector (`+`) | **yes** 🏆 | `~` only, via `when` + a marker | **yes** 🏆 | **yes** 🏆 (in a `.css.ts`) |
 | Variant recipes | **`cva`, typed matrix** 🏆 | compose per call site | **`cva`, typed matrix** 🏆 | function over spreads, no matrix |
 | Light/dark theming | **2 values per token** 🏆 | 3 values per token | 4 values per token | **2 values per token** 🏆 (custom properties, hand-declared) |
 | Dynamic values | inline `style` | **custom property** 🏆 (survives the cascade) | inline `style` | **custom property** 🏆 (survives the cascade) |
-| Register an `@property` (not via `globalCss`) | **`global.vars`** 🏆 | **`stylex.types.*`** 🏆 | **`globalVars`** 🏆 | raw block in a `.css.ts` only |
-| Animate a registered property | **yes** 🏆 | declaration dropped, no keyframe or rule | **yes** 🏆 | **yes** 🏆 (raw keyframes) |
+| Register an `@property` (not via `globalCss`) | **`global.vars`** 🏆 | **`stylex.types.*`** 🏆 | **`globalVars`** 🏆 | **`tokens` object form** 🏆 |
+| Animate a registered property | **yes** 🏆 | declaration dropped, no keyframe or rule | **yes** 🏆 | **yes** 🏆 (`keyframes` config) |
 | Links its stylesheet in a server-rendered app | **`import "virtual:bamboo.css"`** 🏆 | dev needs a shim in `root.tsx` | **plain CSS import** 🏆 | app plugin for dev and prod |
 | **Correctness & maintenance** | | | | |
 | Mistyped token name | **build fails** 🏆 | TS error, build succeeds | not caught at all | **build fails** 🏆 (with a did-you-mean) |
 | Mistyped property name | **caught** (TS2561) 🏆 | ships `pading-block` | **caught** (TS2561) 🏆 | **caught** (TS2345) 🏆 |
-| Delete a page → CSS shrinks | **−22.0%** 🏆 | −8.4% | −13.5% | −12.7% |
-| Class names folded to literals | **522 / 522** 🏆 | **453 / 458** 🏆 | 25 / 529 (rest computed in browser, 14.7 KB runtime chunk) | **441 / 441** 🏆 |
+| Delete a page → CSS shrinks | **−22.0%** 🏆 | −8.4% | −13.5% | −12.8% |
+| Class names folded to literals | **522 / 522** 🏆 | **453 / 458** 🏆 | 25 / 529 (rest computed in browser, 14.7 KB runtime chunk) | **440 / 440** 🏆 |
 | | | | | |
-| **Rows won**, of 31 scored 🏆 | **16** | **7** | **10** | **25** |
+| **Rows won**, of 31 scored 🏆 | **14** | **5** | **9** | **27** |
 
 ---
 
@@ -91,40 +91,40 @@ measures the emitted stylesheet.
 
 | Style definitions | Bamboo | StyleX | Panda | Truss |
 | --- | --- | --- | --- | --- |
-| 0 (as shipped) | ref | −4.7% | +29.4% | −21.8% |
-| 50 | ref | +9.8% | +26.0% | −20.0% |
-| 200 | ref | +42.1% | +21.0% | −18.5% |
-| 800 | ref | **+96.0%** | **+12.3%** | **−15.4%** |
+| 0 (as shipped) | ref | −4.7% | +29.4% | −22.7% |
+| 50 | ref | +9.8% | +26.0% | −21.4% |
+| 200 | ref | +42.1% | +21.0% | −19.5% |
+| 800 | ref | **+96.0%** | **+12.3%** | **−16.1%** |
 
 | | Marginal cost per declaration | Gap to Bamboo at n=0 | at n=800 |
 | --- | --- | --- | --- |
 | Bamboo | 44.0 B raw · 2.0 B brotli | ref | ref |
 | Panda | 40.3 B raw · 2.0 B brotli | +10,587 B | −7,013 B |
 | StyleX | 65.8 B raw · 5.5 B brotli | −2,990 B | +101,809 B |
-| Truss | 36.4 B raw · 1.8 B brotli | −13,758 B | −50,258 B |
+| Truss | 33.4 B raw · 1.8 B brotli | −14,473 B | −65,273 B |
 
 **The baseline ranking does not fully survive added style volume.** StyleX starts below Bamboo and
 crosses it before 50 generated definitions: it is almost pure slope, since every rule carries
 `:not(#\#)` specificity padding that repeats per declaration and compresses badly. Bamboo and Panda
 add 2.0 B brotli per declaration, so Panda's compressed penalty stays close to 2.1 KB even though its
 lower raw slope crosses Bamboo by 800 definitions. Truss has the lowest slope on both axes, so its
-lead over Bamboo narrows from 22% to 15% across the sweep but holds throughout.
+lead over Bamboo narrows from 23% to 16% across the sweep but holds throughout.
 
 ### Dev loop and app size
 
 `tools/dev-scale.mjs` adds *N* generated source files and re-measures. Every module carries identical
 declarations, so they fold to the same classes: the first generated module changes Bamboo from
-43,420 to 43,604 B and Truss from 29,662 to 29,812 B, then the stylesheets stay flat while only file
+43,420 to 43,604 B and Truss from 28,947 to 29,086 B, then the stylesheets stay flat while only file
 count grows.
 
 **Edit → HMR broadcast, ms:**
 
 | Extra source files | Bamboo | StyleX | Panda | Truss |
 | --- | --- | --- | --- | --- |
-| 0 (as shipped) | 17 | 2 | 2 | 2 |
-| 25 | 15 | 2 | 3 | 3 |
-| 100 | 16 | 3 | 2 | 3 |
-| 400 | 14 | 2 | 2 | 2 |
+| 0 (as shipped) | 16 | 2 | 2 | 2 |
+| 25 | 14 | 2 | 2 | 2 |
+| 100 | 17 | 2 | 2 | 3 |
+| 400 | 16 | 3 | 3 | 3 |
 
 This column counts the first broadcast of any kind, so it answers "does this engine's own reaction
 grow with the inventory" within one engine; it is not a cross-engine comparison, for the reason the
@@ -136,10 +136,10 @@ flat:
 
 | | Bamboo | StyleX | Panda | Truss |
 | --- | --- | --- | --- | --- |
-| Production build, 0 → 400 files | 1,636 → 2,164 ms | 2,641 → 3,379 ms | 2,140 → 2,388 ms | 1,124 → 1,344 ms |
-| — per added file | 1.32 ms | 1.85 ms | 0.62 ms | 0.55 ms |
-| Dev server cold start, 0 → 400 files | 1,731 → 2,479 ms | 1,643 → 2,511 ms | 1,564 → 2,018 ms | 1,029 → 1,562 ms |
-| — per added file | 1.87 ms | 2.17 ms | 1.14 ms | 1.33 ms |
+| Production build, 0 → 400 files | 1,694 → 2,187 ms | 2,599 → 3,354 ms | 2,099 → 2,446 ms | 1,173 → 1,454 ms |
+| — per added file | 1.23 ms | 1.89 ms | 0.87 ms | 0.70 ms |
+| Dev server cold start, 0 → 400 files | 1,763 → 2,514 ms | 1,665 → 2,459 ms | 1,569 → 2,057 ms | 1,157 → 1,655 ms |
+| — per added file | 1.88 ms | 1.99 ms | 1.22 ms | 1.25 ms |
 
 Read the milliseconds, not a percentage: the app is 13 source files, so 400 more is 32× the inventory
 and any per-file constant reads as a large percentage off that base. Carried out to 1,600 extra files
@@ -147,28 +147,28 @@ and any per-file constant reads as a large percentage off that base. Carried out
 
 | Extra source files | 0 | 400 | 800 | 1,600 | per added file |
 | --- | --- | --- | --- | --- | --- |
-| Bamboo | 1,630 ms | 2,193 ms | 2,722 ms | 3,657 ms | 1.27 ms |
-| StyleX | 2,668 ms | 3,443 ms | 4,079 ms | 5,311 ms | 1.65 ms |
-| Panda | 2,103 ms | 2,405 ms | 2,687 ms | 3,184 ms | 0.68 ms |
-| Truss | 1,102 ms | 1,379 ms | 1,630 ms | 2,243 ms | 0.71 ms |
+| Bamboo | 1,625 ms | 2,151 ms | 2,696 ms | 3,682 ms | 1.29 ms |
+| StyleX | 2,634 ms | 3,378 ms | 3,979 ms | 5,321 ms | 1.68 ms |
+| Panda | 2,086 ms | 2,435 ms | 2,665 ms | 3,137 ms | 0.66 ms |
+| Truss | 1,121 ms | 1,448 ms | 1,712 ms | 2,312 ms | 0.74 ms |
 
 **This is where the main table's build rows stop generalising, but only for Bamboo against Panda.**
 Truss is fastest at every size and shares the lowest slope with Panda, so its build win survives the
 measured range. Panda crosses Bamboo between 400 and 800 extra files and closes on Truss without
-reaching it. Bamboo stays ahead of StyleX at 1,600 files by 1.7 s and has the lower slope.
+reaching it. Bamboo stays ahead of StyleX at 1,600 files by 1.6 s and has the lower slope.
 
 Run the same sweep with `ORPHANED=1` and the generated modules remain inside `include` but outside the
 bundle graph:
 
 | Orphaned source files | Bamboo | StyleX | Panda | Truss |
 | --- | --- | --- | --- | --- |
-| 0 | 1,682 ms | 2,705 ms | 2,097 ms | 1,116 ms |
-| 400 | 1,753 ms | 2,812 ms | 2,295 ms | 1,065 ms |
-| 800 | 1,889 ms | 2,805 ms | 2,364 ms | 1,083 ms |
-| 1,600 | 2,116 ms | 2,677 ms | 2,542 ms | 1,097 ms |
+| 0 | 1,634 ms | 2,675 ms | 2,117 ms | 1,208 ms |
+| 400 | 1,805 ms | 2,622 ms | 2,224 ms | 1,197 ms |
+| 800 | 1,883 ms | 2,641 ms | 2,340 ms | 1,163 ms |
+| 1,600 | 2,090 ms | 2,649 ms | 2,525 ms | 1,160 ms |
 | CSS emitted, 0 → 1,600 | +2 B | **+0 B** | +168 B | **+0 B** |
 
-Over the 400→1,600 segment Bamboo adds 0.30 ms per orphaned file and Panda 0.21 ms; StyleX and
+Over the 400→1,600 segment Bamboo adds 0.24 ms per orphaned file and Panda 0.25 ms; StyleX and
 Truss add nothing measurable, since neither reads a file the bundle does not reach. Output does not
 grow per file: StyleX and Truss emit nothing, Bamboo adds a fixed 2 B once any matching orphan
 exists, and Panda adds one fixed 168 B rule set because every generated module contains the same
@@ -186,10 +186,10 @@ overriding the same 18 colours light and dark.
 
 | Brand themes | Bamboo | StyleX | Panda | Truss |
 | --- | --- | --- | --- | --- |
-| 0 | 7,357 B | 7,008 B | 9,518 B | 5,751 B |
-| 2 | 7,357 B | 7,427 B | 9,518 B | 6,070 B |
-| 8 | 7,357 B | 8,350 B | 9,518 B | 6,787 B |
-| **added per theme** | **0 B** 🏆 | +168 B | **0 B** 🏆 | +130 B |
+| 0 | 7,357 B | 7,008 B | 9,518 B | 5,688 B |
+| 2 | 7,357 B | 7,427 B | 9,518 B | 5,973 B |
+| 8 | 7,357 B | 8,350 B | 9,518 B | 6,734 B |
+| **added per theme** | **0 B** 🏆 | +168 B | **0 B** 🏆 | +131 B |
 
 **Theme payload, fetched only when a theme is selected:**
 
@@ -312,17 +312,15 @@ Everything later includes Vite's protocol, React Fast Refresh and the socket rou
 paint** is end to end.
 
 On this run the shared edit lands JS last for Bamboo, Panda and Truss and CSS last for StyleX; the
-component edit is the same except Panda, which ends on CSS. The flash runs from 0 ms (Panda, Truss)
-to 75 ms (Bamboo) ahead of the correct paint on the shared edit.
+component edit lands JS last for all but Panda. The flash runs from 0 ms (Panda, Truss) to 74 ms
+(Bamboo) ahead of the correct paint on the shared edit.
 
 **Server reaction is the row to read carefully.** It counts the first broadcast that carries an
 update payload, not the first broadcast of any kind, because those are not the same event. An engine
 may announce "the CSS changed, go refetch" the moment the file watcher fires, before it has compiled
 anything, and the stylesheet the browser then refetches still holds the old rule. On the component
-edit StyleX pings that way at ~3 ms while its update lands at ~112 ms and its rule goes live at
-~260 ms; Truss behaved the same way until 2.29.12 and now broadcasts after compiling. Counting only
-an update payload puts every engine on the same event, and costs StyleX and Truss the flattering
-number they used to post.
+edit StyleX pings that way at ~3 ms while its update lands at 81 ms and its rule goes live at
+231 ms. Counting only an update payload puts every engine on the same event.
 
 The shared edit has no such figure at all. That probe runs on a bare websocket with no browser
 attached, and a shared style module is not in a browserless client's module graph, so no engine
