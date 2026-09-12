@@ -685,6 +685,10 @@
     "ocAccent": {"kind":"static","defs":{"outlineColor":"var(--accent)"}},
     "outlineColor": {"kind":"variable","props":["outlineColor"],"incremented":false},
     "brandGradient": {"kind":"static","defs":{"backgroundImage":"linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #22d3ee))"}},
-    "shimmerGradient": {"kind":"static","defs":{"backgroundImage":"linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 32%, transparent), var(--accent))"}}
+    "shimmerGradient": {"kind":"static","defs":{"backgroundImage":"linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 32%, transparent), var(--accent))"}},
+    "spin": {"kind":"keyframe","name":"spin"},
+    "pulse": {"kind":"keyframe","name":"pulse"},
+    "shimmer": {"kind":"keyframe","name":"shimmer"},
+    "sweep": {"kind":"keyframe","name":"sweep"}
   }
 }

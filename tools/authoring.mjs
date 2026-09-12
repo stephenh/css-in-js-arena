@@ -94,7 +94,6 @@ const styling = {
     "truss-config.ts (tokens)": countLines(join(ROOT, "apps/truss/truss-config.ts")),
     "reset.css (vendored preflight)": countLines(join(ROOT, "apps/truss/app/reset.css")),
     "theme.css.ts (light-dark tokens)": countLines(join(ROOT, "apps/truss/app/theme.css.ts")),
-    "truss-ssr.ts (SSR glue)": countLines(join(ROOT, "apps/truss/truss-ssr.ts")),
     "ui.ts": styleLines(join(ROOT, "apps/truss/app/ui.ts")),
     // Selectors a chain cannot express live beside their route.
     ...Object.fromEntries(

@@ -2,7 +2,6 @@ import { trussPlugin } from "@homebound/truss/plugin";
 import { reactRouter } from "@react-router/dev/vite";
 import { defineConfig } from "vite";
 
-import { trussSsr } from "./truss-ssr.ts";
 
 // Truss's Vite plugin is the compiler: it rewrites every `Css.*.$` chain to a
 // style hash of literal class names, folds a fully static `css=` prop to a
@@ -15,7 +14,7 @@ export default defineConfig({
   // downleveller, not the engine, and it only affects engines that emit modern
   // CSS. Disabling it means each stylesheet is exactly what its engine wrote.
   build: { cssMinify: false },
-  plugins: [trussSsr(), trussPlugin({ mapping: "./app/Css.json" }), reactRouter()],
+  plugins: [trussPlugin({ mapping: "./app/Css.json" }), reactRouter()],
   resolve: {
     tsconfigPaths: true,
   },

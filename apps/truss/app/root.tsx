@@ -63,20 +63,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        {/* Dev-only Truss wiring. `trussPlugin` injects this tag into
-            `index.html`, which a server-rendered app does not have. The runtime
-            fetches `/virtual:truss.css` into a <style> tag and refreshes it on
-            HMR. It is created imperatively rather than server-rendered: Vite
-            rewrites `<script src>` tags it serves and React then reports the
-            rewritten attribute as a hydration mismatch. */}
-        {import.meta.env.DEV && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html:
-                "var s=document.createElement('script');s.type='module';s.src='/@id/virtual:truss:runtime';document.head.appendChild(s);",
-            }}
-          />
-        )}
       </head>
       <body>
         <div css={s.shell}>

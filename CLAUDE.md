@@ -24,11 +24,10 @@ caveat, state the caveat as a present fact.
 `apps/bamboo` is the **reference app**. Every other app is diffed against it, so all apps match each
 other transitively.
 
-`apps/truss` carries one piece of app-level glue, `truss-ssr.ts`: Truss's Vite plugin links its
-stylesheet through `index.html`, which a React Router app does not have, so that plugin exposes the
-emitted CSS as `virtual:truss.css` and keeps `.css.ts` imports out of Vite's CSS pipeline. The
-generated `app/Css.ts` and `app/Css.json` are committed, as Truss recommends; `npm run codegen`
-regenerates them after a `truss-config.ts` change.
+`apps/truss` links its stylesheet with `import "virtual:truss.css"` in `app/root.tsx`, which the
+Truss plugin resolves natively; the app carries no SSR glue of its own. The generated `app/Css.ts`
+and `app/Css.json` are committed, as Truss recommends; `npm run codegen` regenerates them after a
+`truss-config.ts` change.
 
 ## The one rule
 

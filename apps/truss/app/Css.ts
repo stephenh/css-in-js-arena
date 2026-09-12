@@ -2974,6 +2974,24 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     );
   }
 
+  // keyframes
+  /** Sets `animation: spin value`. */
+  spin(value: string) {
+    return this.add("animation", `spin ${value}`);
+  }
+  /** Sets `animation: pulse value`. */
+  pulse(value: string) {
+    return this.add("animation", `pulse ${value}`);
+  }
+  /** Sets `animation: shimmer value`. */
+  shimmer(value: string) {
+    return this.add("animation", `shimmer ${value}`);
+  }
+  /** Sets `animation: sweep value`. */
+  sweep(value: string) {
+    return this.add("animation", `sweep ${value}`);
+  }
+
   get $(): T & { readonly __kind: S } {
     if (this.opts.runtimeError) {
       throw new Error(this.opts.runtimeError);
