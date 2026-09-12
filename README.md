@@ -15,20 +15,20 @@ Measured 2026-09-12 · Linux, Node 26.8, Vite 8.2.2
 
 | Engine | Shipped bytes | Build & dev | Authoring | Correctness & maintenance | Rows won 🏆 |
 | --- | --- | --- | --- | --- | --- |
-| Bamboo | 3 / 11 | 0 / 7 | **7** / 9 🏆 | **4** / 4 🏆 | 14 / 31 |
+| Bamboo | 3 / 11 | 0 / 7 | 7 / 9 | **4** / 4 🏆 | 14 / 31 |
 | StyleX | 2 / 11 | 0 / 7 | 2 / 9 | 1 / 4 | 5 / 31 |
 | Panda | 1 / 11 | 1 / 7 | 6 / 9 | 1 / 4 | 9 / 31 |
-| **Truss** 🏆 | **11** / 11 🏆 | **6** / 7 🏆 | **7** / 9 🏆 | 3 / 4 | **27** / 31 🏆 |
+| **Truss** 🏆 | **11** / 11 🏆 | **6** / 7 🏆 | **8** / 9 🏆 | 3 / 4 | **28** / 31 🏆 |
 
 Axes are not equally weighted and two are unscored, so the tally is a scanning aid, not the
 judgement. **Truss now wins every shipped-bytes row.** Its stylesheet is a third smaller than
 Bamboo's and it has the lowest marginal cost per declaration, so the lead holds as style volume
 grows rather than eroding. It also builds and starts fastest and refetches the least on an edit.
 **Bamboo is still the only engine that catches every mistake the arena throws**, and it prunes the
-most CSS when a page is deleted. **What Truss still trades away is API surface**: there is no
-variant construct beyond a plain function over spreads, and a server-rendered app needs a small
-plugin of its own to link the stylesheet at all. Panda answers a component edit faster than anyone,
-because its Vite-side JavaScript transform is a no-op.
+most CSS when a page is deleted. **What Truss still trades away is a first-party answer to
+server-side rendering**: linking its stylesheet from a React Router app needs a small plugin of its
+own. Panda answers a component edit faster than anyone, because its Vite-side JavaScript transform
+is a no-op.
 
 ---
 
@@ -62,7 +62,7 @@ because its Vite-side JavaScript transform is a no-op.
 | Total lines written | 3,921 | 4,090 | 3,930 | **2,405** 🏆 (one line per style) |
 | Structural & relational selectors | **one rule on the container** 🏆 | class per cell, `last` in JS | **one rule on the container** 🏆 | **one rule on the container** 🏆 (in a `.css.ts`) |
 | Next-sibling selector (`+`) | **yes** 🏆 | `~` only, via `when` + a marker | **yes** 🏆 | **yes** 🏆 (in a `.css.ts`) |
-| Variant recipes | **`cva`, typed matrix** 🏆 | compose per call site | **`cva`, typed matrix** 🏆 | function over spreads, no matrix |
+| Component variants, typed and exhaustive | **`cva`, inferred props** 🏆 | compose per call site | **`cva`, inferred props** 🏆 | **`Record<Union, Properties>`, declared props** 🏆 |
 | Light/dark theming | **2 values per token** 🏆 | 3 values per token | 4 values per token | **2 values per token** 🏆 (custom properties, hand-declared) |
 | Dynamic values | inline `style` | **custom property** 🏆 (survives the cascade) | inline `style` | **custom property** 🏆 (survives the cascade) |
 | Register an `@property` (not via `globalCss`) | **`global.vars`** 🏆 | **`stylex.types.*`** 🏆 | **`globalVars`** 🏆 | **`tokens` object form** 🏆 |
@@ -74,7 +74,7 @@ because its Vite-side JavaScript transform is a no-op.
 | Delete a page → CSS shrinks | **−22.0%** 🏆 | −8.4% | −13.5% | −12.8% |
 | Class names folded to literals | **522 / 522** 🏆 | **453 / 458** 🏆 | 25 / 529 (rest computed in browser, 14.7 KB runtime chunk) | **440 / 440** 🏆 |
 | | | | | |
-| **Rows won**, of 31 scored 🏆 | **14** | **5** | **9** | **27** |
+| **Rows won**, of 31 scored 🏆 | **14** | **5** | **9** | **28** |
 
 ---
 
@@ -257,6 +257,26 @@ emitting modern CSS. Off, every stylesheet here is what its engine wrote.
 
 StyleX still shows Lightning CSS output because `@stylexjs/unplugin` depends on it directly. That is
 its product, not the harness.
+
+</details>
+
+<details>
+<summary><strong>Why is the variant row not called "recipes"?</strong></summary>
+
+Because naming it after one engine's API biases it. The question the row asks is whether a component
+with discrete states can be declared in one place, with a call site the compiler checks.
+
+Bamboo and Panda answer with `cva`: a base plus a variant matrix, and the accepted props are inferred
+from the definition. Truss answers with a documented convention rather than an API — a
+`Record<Variant, Properties>` map spread over a base hash, since a `Css.….$` expression is a plain
+object. Both are checked. Removing a map entry in the arena app fails the build with TS2741
+("Property 'link' is missing … but required in type 'Record<ButtonTone, Properties>'"), and a
+mistyped variant at a call site fails with TS2820 and a did-you-mean. The difference is that `cva`
+infers the prop type from the definition while the Truss convention declares the union first and
+checks the map against it.
+
+StyleX has no single definition point: variants are composed at each call site, so nothing ties the
+states of a component together or checks that they are all handled.
 
 </details>
 
