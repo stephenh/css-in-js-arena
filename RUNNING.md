@@ -11,6 +11,7 @@ Each engine gets a port pair by its index in `tools/engines.json` — `300N` for
 | Bamboo CSS | `@bamboocss/vite` | 3001 | 4001 |
 | StyleX | `@stylexjs/unplugin` | 3002 | 4002 |
 | Panda CSS | `@pandacss/postcss` | 3003 | 4003 |
+| Truss | `@homebound/truss/plugin` | 3004 | 4004 |
 
 `tools/engines.json` is the single source of truth for that list. Adding an engine is a checklist —
 see [`CLAUDE.md`](./CLAUDE.md).
@@ -40,6 +41,7 @@ One terminal per engine, each on its assigned port:
 cd apps/bamboo && PORT=3001 npm start
 cd apps/stylex && PORT=3002 npm start
 cd apps/panda  && PORT=3003 npm start
+cd apps/truss  && PORT=3004 npm start
 ```
 
 ## Verify parity — the gate
@@ -49,7 +51,7 @@ cd apps/panda  && PORT=3003 npm start
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
@@ -60,7 +62,7 @@ worst case of ≈0.047% — that residual is the footer credit line, which diffe
 Two things that are easy to get wrong:
 
 - `layout-diff.mjs` takes the challenger as its **fourth** argument and defaults to `stylex`. A loop
-  without it never geometry-checks Panda at all.
+  without it never geometry-checks Panda or Truss at all.
 - Both tools freeze CSS animations before measuring, because `getBoundingClientRect()` reports the
   transformed box and `/lab` animates. Without that the gate fails at random.
 
@@ -79,7 +81,7 @@ node unused.mjs     # class rules that can never apply
 Kill the servers first; CPU contention skews the timings.
 
 ```bash
-lsof -ti:3001,3002,3003 | xargs kill
+lsof -ti:3001,3002,3003,3004 | xargs kill
 
 cd tools
 RUNS=5 ./timings.sh   # production build, cold and warm
@@ -104,7 +106,7 @@ It reports the edit as **phases**, not one number, because one number was measur
 
 | phase | what it is |
 | --- | --- |
-| `write → ws` | the dev server's own reaction, up to the HMR broadcast. The only phase attributable to the engine alone. |
+| `write → ws` | the dev server's own reaction, up to the HMR broadcast that carries an update payload. The only phase attributable to the engine alone. |
 | `write → rule live` | the new rule is live in the document |
 | `write → JS re-executed` | the edited module re-ran and React re-rendered |
 | `write → correct paint` | the target computes the value that was written — true end to end |
@@ -124,6 +126,14 @@ is wrong twice over, and both are visible in the tool's own output:
 trace instead — browser open, CDP poll running — the same figure moves 3–10× sweep to sweep, so the
 tool measures it separately and reports the socket number.
 
+The probe counts only a message carrying `"type":"update"` (or `"full-reload"`), not a bare custom
+event. An engine can broadcast "the CSS changed, go refetch" the moment the watcher fires, before it
+has compiled anything, and the stylesheet the browser then refetches still holds the old rule.
+StyleX's component edit pings that way at ~3 ms while its real update lands ~110 ms later and its
+rule goes live at ~250 ms; Truss did the same until 2.29.12. Counting only an update payload makes
+every engine's number the same event. `hmr-trace.mjs` still prints every message, so the pings are
+visible when you want them.
+
 **Bamboo's `write → ws` is bimodal**: roughly a fifth of runs land near 25 ms and most of the rest
 near 125 ms. StyleX's component edit splits the same way, between ~10 ms and ~90 ms. Pool at least
 20 runs per engine before reading either, and do not treat a 7-run median as settled — a small
@@ -133,10 +143,20 @@ sample lands wherever the cluster mix happens to fall.
 node hmr-payload.mjs bamboo 4001     # bytes the browser refetches — needs a server you started
 ```
 
+Truss's dev runtime refetches the whole stylesheet from `/virtual:truss.css` on every update, and once
+more 50 ms after Vite's `afterUpdate` event, so its payload carries two stylesheet responses per edit.
+
+Truss's dev server also never prunes a rule once it has emitted it. `hmr-trace.mjs` relies on every edit
+producing a class that has never existed, so on a Truss server that has already seen a value (the
+`write → ws` runs use the same values the trace does) the rule is live before the write and the
+`cssLive` reading comes back empty. Restart the dev server before a trace whose rule-live column
+matters.
+
 `hmr-payload.mjs` still wants a dev server you start yourself, and is deterministic **once it has
-finished warming** — give it ~10s after the port answers and take the second measurement, not the
-first. Measured too early it reports an inflated payload and an extra response (StyleX has been seen
-at 392 KB · 11 instead of its stable 356 KB · 10). If two consecutive runs agree, the number is real.
+finished warming** — give it ~10s after the port answers and take the number two consecutive runs
+agree on, not the first. Measured too early it can report a different payload and response count
+(StyleX and Truss have both been seen one response apart between the first and second run). If two
+consecutive runs agree, the number is real.
 
 `hmr-trace.mjs` is the underlying instrument and can be run directly on one engine for the full
 per-run detail — every websocket message, every module refetch, head mutations:
@@ -196,10 +216,11 @@ trust a result:
 
 ```bash
 git status                                        # clean apart from README.md
-grep -rnw "acent\|padingBlock" apps/*/app/ui.ts   # must return nothing
+grep -rnw "acent\|padingBlock\|leterSpacing" apps/*/app/ui.ts   # must return nothing
 ls apps/*/app/__scale.ts 2>/dev/null              # generated module must be gone
 ls apps/*/app/__orphan.ts 2>/dev/null             # ditto
 find apps/*/styled-system/themes -type f          # no leftover theme artifacts
+grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
 ```
 
 Rebuild each app afterwards too. An interrupted probe can leave `build/` holding a stylesheet that no

@@ -63,7 +63,20 @@ const generated = {
     `export const scaleStyles = [\n` +
     Array.from({ length: n }, (_, i) => `  stylex.props(s.k${i}),`).join("\n") +
     `\n];\n`,
+  // Truss styles are chains, so the same six declarations become one `Css.….$`
+  // line per definition. Any module Vite loads is compiled; there is no `include`.
+  truss: (n) =>
+    `import { Css } from "~/Css";\n\n` +
+    `export const scaleStyles = [\n` +
+    Array.from({ length: n }, (_, i) => `  ${trussChain(i)},`).join("\n") +
+    `\n];\n`,
 };
+
+/** The DECLS set as a Truss chain, i.e. `Css.ptPx(100).pbPx(200).mtPx(300).add(…).fsPx(2000).add(…).$`. */
+const trussChain = (n) =>
+  `Css.ptPx(${100 + n}).pbPx(${200 + n}).mtPx(${300 + n})` +
+  `.add("borderTopWidth", "${(n % 900) + 1000}px").fsPx(${(n % 700) + 2000})` +
+  `.add("letterSpacing", "${(n % 500) + 3000}px").$`;
 
 const MODULE = "app/__scale.ts";
 

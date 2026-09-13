@@ -32,7 +32,9 @@ for (const [app, port] of APPS) {
   const cssBuf = Buffer.concat(cssHref.map((h) => readFileSync(`${ROOT}apps/${app}/build/client${h}`)));
   const jsBuf = Buffer.concat(jsSrc.map((h) => readFileSync(`${ROOT}apps/${app}/build/client${h}`)));
 
-  const cssText = cssBuf.toString();
+  // Comments first: Truss annotates every rule with `/* @truss p:… */`, and
+  // the `@` would otherwise read as an at-rule and hide the rule that follows.
+  const cssText = cssBuf.toString().replace(/\/\*[\s\S]*?\*\//g, "");
   out[app] = {
     cssHref,
     css: size(cssBuf),

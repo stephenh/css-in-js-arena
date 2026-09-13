@@ -21,7 +21,13 @@ const countLines = (file) => {
 // stylex.create()/defineVars()/createTheme() for StyleX.
 const CALL = /(?:\b(?:css|cva|sva)\s*\(\s*\{)|(?:stylex\.(?:create|defineVars|createTheme)\s*\()/;
 
+// Truss has no call to bracket: a style is a `Css.….$` chain, one or many
+// lines, so count from the line that opens a chain to the line that ends it.
+const CHAIN_OPEN = /\bCss\./;
+const CHAIN_CLOSE = /\.\$/;
+
 function styleLines(file) {
+  if (file.includes("/apps/truss/")) return trussStyleLines(file);
   let src;
   try {
     src = readFileSync(file, "utf8");
@@ -48,6 +54,26 @@ function styleLines(file) {
   return count;
 }
 
+/** Non-blank lines that belong to a `Css.….$` chain. */
+function trussStyleLines(file) {
+  let src;
+  try {
+    src = readFileSync(file, "utf8");
+  } catch {
+    return 0;
+  }
+  let inChain = false;
+  let count = 0;
+  for (const line of src.split("\n")) {
+    if (!inChain && CHAIN_OPEN.test(line)) inChain = true;
+    if (inChain) {
+      if (line.trim() !== "") count++;
+      if (CHAIN_CLOSE.test(line)) inChain = false;
+    }
+  }
+  return count;
+}
+
 const styling = {
   bamboo: {
     "bamboo.config.ts (tokens)": countLines(join(ROOT, "apps/bamboo/bamboo.config.ts")),
@@ -63,6 +89,19 @@ const styling = {
     "panda.config.ts (tokens)": countLines(join(ROOT, "apps/panda/panda.config.ts")),
     "index.css (layer order)": countLines(join(ROOT, "apps/panda/app/index.css")),
     "ui.ts (recipes)": styleLines(join(ROOT, "apps/panda/app/ui.ts")),
+  },
+  truss: {
+    "truss-config.ts (tokens)": countLines(join(ROOT, "apps/truss/truss-config.ts")),
+    "reset.css (vendored preflight)": countLines(join(ROOT, "apps/truss/app/reset.css")),
+    "theme.css.ts (light-dark tokens)": countLines(join(ROOT, "apps/truss/app/theme.css.ts")),
+    "ui.ts": styleLines(join(ROOT, "apps/truss/app/ui.ts")),
+    // Selectors a chain cannot express live beside their route.
+    ...Object.fromEntries(
+      ["settings", "pricing", "docs", "lab"].map((r) => [
+        `routes/${r}.css.ts`,
+        countLines(join(ROOT, `apps/truss/app/routes/${r}.css.ts`)),
+      ]),
+    ),
   },
 };
 for (const app of APPS) {
@@ -86,5 +125,7 @@ for (const app of APPS) {
   console.log(`  ${"— TOTAL".padEnd(32)} ${String(totals[app].all).padStart(5)}\n`);
 }
 
-const d = totals.stylex.all - totals.bamboo.all;
-console.log(`stylex − bamboo: ${d > 0 ? "+" : ""}${d} lines (${((d / totals.bamboo.all) * 100).toFixed(1)}%)`);
+for (const app of APPS.slice(1)) {
+  const d = totals[app].all - totals[APPS[0]].all;
+  console.log(`${app} − ${APPS[0]}: ${d > 0 ? "+" : ""}${d} lines (${((d / totals[APPS[0]].all) * 100).toFixed(1)}%)`);
+}

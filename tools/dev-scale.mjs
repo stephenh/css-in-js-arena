@@ -56,6 +56,9 @@ const generated = {
     `import * as stylex from "@stylexjs/stylex";\n\n` +
     `const s = stylex.create({\n  k: {\n${DECLS}\n  },\n});\n\n` +
     `export const m${i} = stylex.props(s.k);\n`,
+  truss: (i) =>
+    `import { Css } from "~/Css";\n\n` +
+    `export const m${i} = Css.ptPx(17).pbPx(19).mtPx(23).add("letterSpacing", "0.037em").$;\n`,
 };
 
 const DIR = "app/__devscale";
@@ -68,6 +71,7 @@ const EDIT = {
   bamboo: { from: `export const pageTitle = css({ fontSize: "25px"`, mk: (v) => `export const pageTitle = css({ fontSize: "${v}px"` },
   panda: { from: `export const pageTitle = css({ fontSize: "25px"`, mk: (v) => `export const pageTitle = css({ fontSize: "${v}px"` },
   stylex: { from: `pageTitle: { fontSize: 25,`, mk: (v) => `pageTitle: { fontSize: ${v},` },
+  truss: { from: `export const pageTitle = Css.f25`, mk: (v) => `export const pageTitle = Css.fsPx(${v})` },
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
