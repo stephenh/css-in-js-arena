@@ -11,7 +11,11 @@ import { defineConfig, newMethod, newMethodsForProp, type FontConfig } from "@ho
  * drives the explicit toggle exactly as it does for Bamboo.
  */
 const palette = {
-  Bg: "var(--bg)",
+  // Named `Page`, not `Bg`: a palette entry named `Bg` generates `Css.bg` for
+  // its colour form, which collides with the `background` shorthand method
+  // Truss 2.33.0 added under the same name, and the generated Css.ts then
+  // has a duplicate identifier. The custom property keeps its `--bg` name.
+  Page: "var(--bg)",
   Surface: "var(--surface)",
   Surface2: "var(--surface2)",
   Surface3: "var(--surface3)",
@@ -64,6 +68,8 @@ const fonts: FontConfig = {
   f17: "17px",
   f18: "18px",
   f19: "19px",
+  f23: "23px",
+  f25: "25px",
   f28: "28px",
   f34: "34px",
 };
@@ -109,11 +115,29 @@ const sections = {
     }),
   fontFamily: () =>
     newMethodsForProp("fontFamily", {
-      fontBody: '"Inter", system-ui, sans-serif',
       fontMono:
         'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     }),
-  outlineColor: () => newMethodsForProp("outlineColor", { ocAccent: "var(--accent)" }),
+  // `newMethod`, not `newMethodsForProp`: the latter also emits a generic
+  // `outlineColor(value)`, which Truss 2.33.0 now generates itself, and the
+  // two collide. Only the named `ocAccent` is wanted here.
+  outlineColor: () => [newMethod("ocAccent", { outlineColor: "var(--accent)" })],
+  // Three named transitions, so no component writes the `transitionProperty` /
+  // `transitionDuration` pair by hand. Each is one `transition` shorthand, and
+  // one shorthand is one atomic rule; the longhand pair was two rules per
+  // distinct property list. Timing function is left at the `ease` default.
+  transition: () => [
+    // The default. Covers every state change the console animates at 0.15s:
+    // hover fills, hover and focus borders, hover text, and the focus ring.
+    newMethod("transition", {
+      transition: "background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s",
+    }),
+    // Table row hover, which is quicker so a cursor dragging down a long table
+    // does not trail colour behind it.
+    newMethod("transitionFast", { transition: "background-color 0.12s" }),
+    // The settings switch: the track fills while its knob slides.
+    newMethod("transitionSlow", { transition: "background-color 0.18s, transform 0.18s" }),
+  ],
   gradients: () => [
     newMethod("brandGradient", {
       backgroundImage: "linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #22d3ee))",

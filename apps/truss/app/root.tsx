@@ -213,13 +213,13 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 }
 
 const s = {
-  shell: Css.df.fdc.mvh100.bgBg.text.$,
+  shell: Css.df.fdc.mvh100.bgPage.text.$,
   nav: Css.sticky.top0
     .z(50)
     .hPx(60)
-    .bgSurfaceGlass.add("backdropFilter", "saturate(180%) blur(12px)").bb.bcBorder.$,
+    .bgSurfaceGlass.backdropFilter("saturate(180%) blur(12px)").bb.bcBorder.$,
   navInner: Css.df.aic.gapPx(20).h100.maxwPx(1240).mxa.pxPx(20).$,
-  brand: Css.df.aic.gapPx(9).fs0.fw(650).f15.add("letterSpacing", "-0.02em").$,
+  brand: Css.df.aic.gapPx(9).fs0.fw(650).f15.ls("-0.02em").$,
   brandMark: Css.dg.pic.sqPx(26).br7.brandGradient.white.$,
   navLinks: Css.df.aic.fdr
     .gapPx(2)
@@ -248,7 +248,7 @@ const s = {
     .leftPx(9)
     .top("50%")
     .transform("translateY(-50%)")
-    .faint.add("pointerEvents", "none")
+    .faint.pen
     .lh(0).$,
   navToggle: Css.dn.ifTabletAndDown.dg.$,
   main: Css.fg1.w100.maxwPx(1240).mxa.ptPx(28).pxPx(20).pbPx(64).$,
@@ -264,10 +264,10 @@ const s = {
   footerBlurb: Css.f12_5.lh(1.55).muted.mtPx(9).maxw("30ch").$,
   footerColTitle: Css.f12.fw(650).mbPx(9).$,
   footerColList: Css.df.fdc.gapPx(6).$,
-  footerColLink: Css.f12_5.muted.transitionProperty("color").transitionDuration("0.15s").onHover.accent.$,
+  footerColLink: Css.f12_5.muted.transition.onHover.accent.$,
   footerBar: Css.df.aic.jcsb.gapPx(14).fww.ptPx(18).bt.bcBorder.f12.faint.$,
   errorPage: Css.maxwPx(1240).mxa.pyPx(60).pxPx(20).$,
-  errorTitle: Css.fsPx(25).fw6.add("letterSpacing", "-0.022em").$,
+  errorTitle: Css.f25.fw6.ls("-0.022em").$,
   errorSub: Css.mtPx(5).f14.muted.$,
   errorPre: Css.w100.pPx(16).mtPx(16).oxa.bgSurface2.br10.f12.$,
 };

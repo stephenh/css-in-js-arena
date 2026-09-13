@@ -58,13 +58,13 @@ export const CASES = {
   truss: {
     leaf: {
       file: `${ROOT}apps/truss/app/routes/dashboard.tsx`,
-      from: `  kpiValue: Css.fsPx(23)`,
+      from: `  kpiValue: Css.f23`,
       mk: (v) => `  kpiValue: Css.fsPx(${v})`,
       base: 23, first: 31, sel: "article span + span",
     },
     shared: {
       file: `${ROOT}apps/truss/app/ui.ts`,
-      from: `export const pageTitle = Css.fsPx(25)`,
+      from: `export const pageTitle = Css.f25`,
       mk: (v) => `export const pageTitle = Css.fsPx(${v})`,
       base: 25, first: 41, sel: "h1",
     },

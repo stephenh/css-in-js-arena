@@ -7,7 +7,7 @@ import { Css } from "~/Css";
  * computed in JavaScript and no class varies per row.
  */
 export const css = {
-  ".runTable th": Css.tal.pyPx(9).pxPx(12).f11_5.fw6.add("letterSpacing", "0.03em").ttu.faint.bb.bcBorder.$,
+  ".runTable th": Css.tal.pyPx(9).pxPx(12).f11_5.fw6.ls("0.03em").ttu.faint.bb.bcBorder.$,
   ".runTable td": Css.pyPx(10).pxPx(12).text.$,
   ".runTable tbody tr:nth-child(even)": Css.bgSurface2.$,
   ".runTable tbody tr:not(:last-child) td": Css.bb.bcBorder.$,
@@ -18,6 +18,6 @@ export const css = {
     "inset 3px 0 0 color-mix(in srgb, var(--danger) 40%, transparent)",
   ).$,
   // Matches `th` as well as `td`, so the numeric headers align with their columns.
-  ".runTable [data-numeric='true']": Css.tar.add("fontVariantNumeric", "tabular-nums").muted.$,
+  ".runTable [data-numeric='true']": Css.tar.tabularNums.muted.$,
   ".runTable tbody tr:hover td": Css.bgSurface3.$,
 };

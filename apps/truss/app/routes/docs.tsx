@@ -211,18 +211,17 @@ const s = {
     .ifStackAndDown.gtc("minmax(0, 1fr)")
     .gapPx(20).$,
   docsNav: Css.sticky.topPx(84).df.fdc.gapPx(18).ifStackAndDown.static.$,
-  sectionLabel: Css.f11.fw(650).ttu.add("letterSpacing", "0.06em").faint.mbPx(6).$,
+  sectionLabel: Css.f11.fw(650).ttu.ls("0.06em").faint.mbPx(6).$,
   navItem: Css.db
     .pyPx(5)
     .pxPx(10)
     .add("borderLeftWidth", "2px")
     .add("borderLeftStyle", "solid")
-    .bcTransparent.f13.muted.transitionProperty("color, border-color")
-    .transitionDuration("0.15s")
+    .bcTransparent.f13.muted.transition
     .onHover.text.$,
   navItemOn: Css.bcAccent.accent.fw6.onHover.accent.$,
   docsToc: Css.sticky.topPx(84).db.ifWideAndDown.dn.$,
-  tocLink: Css.db.pyPx(4).f12_5.muted.transitionProperty("color").transitionDuration("0.15s").onHover.accent.$,
+  tocLink: Css.db.pyPx(4).f12_5.muted.transition.onHover.accent.$,
   tocDeep: Css.plPx(12).$,
 
   crumbs: Css.df.aic.gapPx(7).mbPx(12).f12_5.faint.$,
@@ -247,8 +246,7 @@ const s = {
     .pyPx(11)
     .pxPx(14)
     .ba.bcBorder.br10.mwPx(170)
-    .inherit.tdn.transitionProperty("border-color")
-    .transitionDuration("0.15s")
+    .inherit.tdn.transition
     .onHover.bcAccent.$,
   footLinkNext: Css.tar.$,
   footDir: Css.f11_5.faint.mbPx(2).$,

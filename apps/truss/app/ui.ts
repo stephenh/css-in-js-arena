@@ -17,8 +17,7 @@ const buttonBase = Css.dif.aic
   .pxPx(14)
   .ba.bcTransparent.br6.f13_5.fw(550)
   .lh(1.2)
-  .wsnw.cursorPointer.ocAccent.transitionProperty("background-color, border-color")
-  .transitionDuration("0.15s").$;
+  .wsnw.cursorPointer.ocAccent.transition.$;
 const buttonTone: Record<ButtonTone, Properties> = {
   primary: Css.bgAccent.accentContrast.onHover.bgAccentHover.$,
   secondary: Css.bgSurface.bcBorderStrong.text.onHover.bgSurface2.$,
@@ -36,7 +35,7 @@ export function button(variants: { tone?: ButtonTone; block?: boolean } = {}): P
   };
 }
 
-const badgeBase = Css.dif.aic.gapPx(5).pyPx(2).pxPx(8).brPill.f11_5.fw6.add("letterSpacing", "0.005em").wsnw.$;
+const badgeBase = Css.dif.aic.gapPx(5).pyPx(2).pxPx(8).brPill.f11_5.fw6.ls("0.005em").wsnw.$;
 const badgeStatus: Record<BadgeStatus, Properties> = {
   live: Css.bgSuccessSoft.success.$,
   staging: Css.bgAccentSoft.accent.$,
@@ -49,7 +48,7 @@ export function badge(variants: { status: BadgeStatus }): Properties {
   return { ...badgeBase, ...badgeStatus[variants.status] };
 }
 
-const avatarBase = Css.dg.pic.fs0.brPill.bgAccentSoft.accent.fw(650).add("letterSpacing", "0.02em").$;
+const avatarBase = Css.dg.pic.fs0.brPill.bgAccentSoft.accent.fw(650).ls("0.02em").$;
 const avatarSize: Record<AvatarSize, Properties> = {
   sm: Css.sqPx(24).f10.$,
   md: Css.sqPx(30).f11.$,
@@ -64,8 +63,7 @@ export function avatar(variants: { size?: AvatarSize } = {}): Properties {
 const segButtonBase = Css.pyPx(5)
   .pxPx(11)
   .br4.f12_5.fw(550)
-  .cursorPointer.ocAccent.transitionProperty("background-color, color")
-  .transitionDuration("0.15s").$;
+  .cursorPointer.ocAccent.transition.$;
 const segButtonOn = Css.bgSurface.text.shadowSm.$;
 const segButtonOff = Css.bgTransparent.muted.onHover.text.$;
 
@@ -83,7 +81,7 @@ export function pageBtn(variants: { current?: boolean } = {}): Properties {
   return { ...pageBtnBase, ...(variants.current ? pageBtnOn : pageBtnOff) };
 }
 
-const navLinkBase = Css.db.pyPx(7).pxPx(11).br6.f14.transitionProperty("background-color, color").transitionDuration("0.15s").$;
+const navLinkBase = Css.db.pyPx(7).pxPx(11).br6.f14.transition.$;
 const navLinkOn = Css.bgAccentSoft.accent.fw6.$;
 const navLinkOff = Css.bgTransparent.muted.fw5.onHover.bgSurface2.text.$;
 
@@ -92,7 +90,7 @@ export function navLink(variants: { active?: boolean } = {}): Properties {
   return { ...navLinkBase, ...(variants.active ? navLinkOn : navLinkOff) };
 }
 
-const sideLinkBase = Css.db.pyPx(7).pxPx(10).br6.f13_5.transitionProperty("background-color, color").transitionDuration("0.15s").$;
+const sideLinkBase = Css.db.pyPx(7).pxPx(10).br6.f13_5.transition.$;
 const sideLinkOn = Css.bgAccentSoft.accent.fw6.$;
 const sideLinkOff = Css.bgTransparent.muted.onHover.bgSurface2.text.$;
 
@@ -114,7 +112,7 @@ export function delta(variants: { up: boolean }): Properties {
 
 export const pageHead = Css.df.aife.jcsb.gapPx(20).fww.mbPx(24).$;
 
-export const pageTitle = Css.fsPx(25).fw6.add("letterSpacing", "-0.022em").$;
+export const pageTitle = Css.f25.fw6.ls("-0.022em").$;
 export const pageSub = Css.mtPx(5).f14.muted.maxw("62ch").$;
 export const pageActions = Css.df.gapPx(8).fs0.$;
 
@@ -144,6 +142,5 @@ export const stack = Css.df.fdc.gapPx(18).$;
 export const iconButton = Css.dg.pic
   .sqPx(32)
   .pPx(0)
-  .fs0.bgTransparent.ba.bcBorder.br6.muted.cursorPointer.ocAccent.transitionProperty("background-color, color")
-  .transitionDuration("0.15s")
+  .fs0.bgTransparent.ba.bcBorder.br6.muted.cursorPointer.ocAccent.transition
   .onHover.bgSurface2.text.$;

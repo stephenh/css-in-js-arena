@@ -15,7 +15,7 @@ export function meta() {
  * position has to be computed in javascript and no class varies per row.
  * -----------------------------------------------------------------------------*/
 
-const runTable = Css.w100.add("borderCollapse", "collapse").f13.className("runTable").$;
+const runTable = Css.w100.borderCollapse("collapse").f13.className("runTable").$;
 
 type RunTone = "passed" | "failed" | "running" | "queued";
 
@@ -41,7 +41,7 @@ const motionRow = Css.df.fww.aic.gapPx(22).pyPx(18).pxPx(18).$;
 const motionItem = Css.df.fdc.aic.gapPx(8).f11_5.muted.$;
 
 const spinner = Css.sqPx(22)
-  .brPill.bss.bw2.bcBorder.add("borderTopColor", "var(--accent)")
+  .brPill.bss.bw2.bcBorder.btc("var(--accent)")
   .spin("0.8s linear infinite").$;
 
 const pulseDot = Css.sqPx(12).brPill.bgSuccess.pulse("1.4s ease-in-out infinite").$;
@@ -57,7 +57,7 @@ const trackLabel = Css.wPx(78).muted.$;
 
 const trackBar = Css.relative.f1.hPx(8).brPill.bgSurface3.oh.$;
 
-const trackFill = Css.h100.brPill.shimmerGradient.add("backgroundSize", "200% 100%").shimmer("2.2s linear infinite").$;
+const trackFill = Css.h100.brPill.shimmerGradient.bgSize("200% 100%").shimmer("2.2s linear infinite").$;
 
 /* -----------------------------------------------------------------------------
  * 3. Container queries
@@ -78,7 +78,7 @@ const regionName = Css.f13_5.fw6.$;
 const regionStats = Css.df.gapPx(14).ifContainer({ gt: 339 }).gapPx(22).$;
 
 const regionStat = Css.df.fdc.gapPx(2).$;
-const regionStatValue = Css.f14.fw6.add("fontVariantNumeric", "tabular-nums").$;
+const regionStatValue = Css.f14.fw6.tabularNums.$;
 const regionStatLabel = Css.f11.faint.$;
 
 export default function Lab() {

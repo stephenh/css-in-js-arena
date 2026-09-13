@@ -7,13 +7,12 @@ import { Css } from "~/Css";
  * anchor classes with `Css.className(...)`.
  */
 export const css = {
-  ".switchTrack::after": Css.add("content", '""')
+  ".switchTrack::after": Css.content('""')
     .absolute.topPx(3)
     .leftPx(3)
     .sqPx(16)
     .brPill.bgWhite.shadowSm.transform("translateX(0)")
-    .transitionProperty("transform")
-    .transitionDuration("0.18s").$,
+    .transitionSlow.$,
   "input:checked + .switchTrack": Css.bgAccent.$,
   "input:checked + .switchTrack::after": Css.transform("translateX(16px)").$,
   ".radioCard:has(input:checked)": Css.bcAccent.bgAccentSoft.$,

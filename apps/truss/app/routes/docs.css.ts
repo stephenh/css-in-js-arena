@@ -8,7 +8,7 @@ import { Css } from "~/Css";
  * `.prose p` / `.prose a` would outrank their atomic classes on specificity.
  */
 export const css = {
-  ".prose > h1": Css.f28.fw6.add("letterSpacing", "-0.025em").mbPx(10).$,
+  ".prose > h1": Css.f28.fw6.ls("-0.025em").mbPx(10).$,
   ".prose > h2": Css.f19.fw6.mtPx(30).mbPx(10).ptPx(4).$,
   ".prose > h3": Css.f15_5.fw6.mtPx(22).mbPx(8).$,
   ".prose > p": Css.f14_5.lh(1.68).muted.mbPx(14).$,

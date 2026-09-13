@@ -217,22 +217,22 @@ const s = {
     .leftPx(10)
     .top("50%")
     .transform("translateY(-50%)")
-    .faint.add("pointerEvents", "none")
+    .faint.pen
     .lh(0).$,
   fieldSearch: Css.plPx(31).w100.$,
-  select: Css.add("appearance", "none").prPx(24).$,
+  select: Css.appearanceNone.prPx(24).$,
 
   tableWrap: Css.oxa.bgSurface.ba.bcBorder.br14.shadowSm.$,
-  table: Css.w100.mwPx(860).add("borderCollapse", "separate").add("borderSpacing", "0").$,
+  table: Css.w100.mwPx(860).borderCollapse("separate").borderSpacing("0").$,
   th: Css.pyPx(10)
     .pxPx(14)
-    .bgSurface2.bb.bcBorder.f11_5.fw6.ttu.add("letterSpacing", "0.05em").muted.tal.wsnw.$,
-  tr: Css.bgTransparent.transitionProperty("background-color").transitionDuration("0.12s").onHover.bgSurface2.$,
+    .bgSurface2.bb.bcBorder.f11_5.fw6.ttu.ls("0.05em").muted.tal.wsnw.$,
+  tr: Css.bgTransparent.transitionFast.onHover.bgSurface2.$,
   td: Css.pyPx(11).pxPx(14).bb.bcBorder.f13_5.vam.$,
   tdLast: Css.add("borderBottomWidth", "0").$,
-  colNum: Css.tar.add("fontVariantNumeric", "tabular-nums").$,
+  colNum: Css.tar.tabularNums.$,
   colTight: Css.w("1%").wsnw.$,
-  check: Css.add("accentColor", "var(--accent)").cursorPointer.$,
+  check: Css.accentColor("var(--accent)").cursorPointer.$,
   cellName: Css.fw6.$,
   cellRepo: Css.fontMono.f11_5.faint.mtPx(2).$,
   owner: Css.df.aic.gapPx(8).wsnw.$,
@@ -240,7 +240,7 @@ const s = {
   progress: Css.df.aic.gapPx(9).mwPx(130).$,
   progressTrack: Css.fg1.hPx(5).brPill.bgSurface3.oh.$,
   progressFill: Css.h100.brPill.bgAccent.$,
-  progressNum: Css.f11_5.muted.add("fontVariantNumeric", "tabular-nums").wPx(30).tar.$,
+  progressNum: Css.f11_5.muted.tabularNums.wPx(30).tar.$,
 
   tableFoot: Css.df.aic.jcsb
     .gapPx(14)
@@ -253,6 +253,6 @@ const s = {
     .sqPx(1)
     .pPx(0)
     .mPx(-1)
-    .oh.add("clipPath", "inset(50%)")
-    .wsnw.add("borderWidth", "0").$,
+    .oh.clipPath("inset(50%)")
+    .wsnw.bw("0").$,
 };

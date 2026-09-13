@@ -156,11 +156,11 @@ const s = {
     .pyPx(3)
     .pxPx(11)
     .brPill.bgAccent.accentContrast.f11.fw(650)
-    .add("letterSpacing", "0.02em").wsnw.$,
+    .ls("0.02em").wsnw.$,
   planName: Css.f15.fw(650).$,
   planBlurb: Css.f13.muted.mtPx(3).$,
   planPrice: Css.df.aib.gapPx(5).pbPx(14).bb.bcBorder.$,
-  planAmount: Css.f34.fw(680).add("letterSpacing", "-0.03em").lh(1).$,
+  planAmount: Css.f34.fw(680).ls("-0.03em").lh(1).$,
   planPeriod: Css.f13.muted.$,
   planFeatures: Css.df.fdc.gapPx(9).fg1.$,
   planFeature: Css.df.aifs.gapPx(8).f13.lh(1.45).muted.$,
@@ -170,10 +170,10 @@ const s = {
   compareTitleTop: Css.mtPx(44).$,
 
   tableWrap: Css.oxa.bgSurface.ba.bcBorder.br14.shadowSm.$,
-  table: Css.w100.mwPx(620).add("borderCollapse", "separate").add("borderSpacing", "0").$,
+  table: Css.w100.mwPx(620).borderCollapse("separate").borderSpacing("0").$,
   th: Css.pyPx(10).pxPx(14).bgSurface2.bb.bcBorder.f12.fw6.text.tac.$,
   thLeft: Css.tal.$,
-  tr: Css.bgTransparent.transitionProperty("background-color").transitionDuration("0.12s").onHover.bgSurface2.$,
+  tr: Css.bgTransparent.transitionFast.onHover.bgSurface2.$,
   td: Css.pyPx(11).pxPx(14).bb.bcBorder.f13_5.tac.$,
   tdFirst: Css.tal.fw(550).$,
   tdLast: Css.add("borderBottomWidth", "0").$,
@@ -183,7 +183,7 @@ const s = {
   faq: Css.bgSurface.ba.bcBorder.br10.$,
   faqSummary: Css.pyPx(14)
     .pxPx(16)
-    .f13_5.fw6.add("listStyle", "none")
+    .f13_5.fw6.listNone
     .df.aic.jcsb.gapPx(12)
     .cursorPointer.ocAccent.className("faqSummary").$,
   faqBody: Css.pyPx(13).pxPx(16).bt.bcBorder.f13.lh(1.6).muted.$,

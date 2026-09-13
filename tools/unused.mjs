@@ -72,8 +72,12 @@ for (const [app, port] of APPS) {
   // the captured HTML does not happen to contain looks dead when it is not.
   // Detect that from the JS bundles and report n/a rather than a false number.
   // Tolerate whitespace before the brace — the stylesheet is not minified.
-  const allTokens = [...new Set([...css.matchAll(/\.((?:\\.|[\w-])+)(?=[\s,{:>+~[)])/g)].map((m) => unescape(m[1])))];
-  const literal = allTokens.filter((t) => jsOnly.includes(t)).length;
+  // Scan selector text only: a decimal inside a declaration (`0.15s,`) looks
+  // exactly like a class token, and a phantom token drags the fold ratio down.
+  const allTokens = [...new Set([...selectorText(css).matchAll(/\.((?:\\.|[\w-])+)(?=[\s,{:>+~[)])/g)].map((m) => unescape(m[1])))];
+  // Whole-token match: `.br4` must not count as literal because the JS happens
+  // to contain `br40` somewhere.
+  const literal = allTokens.filter((t) => new RegExp(`(?<![\\w-])${escapeRe(t)}(?![\\w-])`).test(jsOnly)).length;
   const foldsToLiterals = allTokens.length > 0 && literal / allTokens.length > 0.5;
 
   let total = 0;
@@ -123,4 +127,46 @@ for (const [app] of APPS) {
     if (r.deadSample.length) console.log(`  examples              ${r.deadSample.join("\n                        ")}`);
   }
   console.log("");
+}
+
+/**
+ * The selector parts of a stylesheet, with every declaration block dropped.
+ *
+ * A brace-depth walk: text at depth 0 is a selector or at-rule prelude, and so
+ * is text inside a conditional group rule (`@media`, `@container`, `@supports`,
+ * `@layer`), which holds further rules rather than declarations. Everything
+ * else — a plain rule body, and the body of `@keyframes` or `@property` — is
+ * declaration text and is discarded. Conservative: it can only drop tokens, and
+ * a dropped selector would show up as an unreachable rule, not a silent pass.
+ *
+ * I.e. `@media (x) { .a:hover { transform: scale(0.82); } }` yields
+ * `@media (x) .a:hover`, so `.a` is a token and the `.82` in `scale()` is not.
+ */
+function selectorText(css) {
+  const GROUP = /^\s*@(media|container|supports|layer)\b/;
+  const out = [];
+  const isGroup = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+    if (c !== "{" && c !== "}") continue;
+    const chunk = css.slice(start, i);
+    if (c === "{") {
+      if (depth === 0 || isGroup[depth - 1]) out.push(chunk);
+      isGroup[depth] = depth === 0 || isGroup[depth - 1] ? GROUP.test(chunk) : false;
+      depth++;
+    } else {
+      if (depth > 0 && isGroup[depth - 1]) out.push(chunk);
+      depth = Math.max(0, depth - 1);
+    }
+    start = i + 1;
+  }
+  if (depth === 0) out.push(css.slice(start));
+  return out.join("\n");
+}
+
+/** Escapes a class token for use inside a RegExp. */
+function escapeRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

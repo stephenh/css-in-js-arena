@@ -27,7 +27,7 @@ const C = {
   },
   truss: {
     file: `${ROOT}apps/truss/app/ui.ts`,
-    from: `export const pageTitle = Css.fsPx(25)`,
+    from: `export const pageTitle = Css.f25`,
     to: `export const pageTitle = Css.fsPx(41)`,
   },
 }[app];

@@ -55,6 +55,8 @@ export type Typography =
   | "f17"
   | "f18"
   | "f19"
+  | "f23"
+  | "f25"
   | "f28"
   | "f34";
 
@@ -141,6 +143,64 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     return this.add("animationTimingFunction", value);
   }
 
+  // appearance
+  /** Sets `appearance: "none"`. */
+  get appearanceNone() {
+    return this.add("appearance", "none");
+  }
+  /** Sets `appearance: value`. */
+  appearance(value: Properties["appearance"]) {
+    return this.add("appearance", value);
+  }
+
+  // aspectRatio
+  /** Sets `aspectRatio: "1 / 1"`. */
+  get arSquare() {
+    return this.add("aspectRatio", "1 / 1");
+  }
+  /** Sets `aspectRatio: "16 / 9"`. */
+  get arVideo() {
+    return this.add("aspectRatio", "16 / 9");
+  }
+  /** Sets `aspectRatio: value`. */
+  ar(value: Properties["aspectRatio"]) {
+    return this.add("aspectRatio", value);
+  }
+
+  // background
+  /** Sets `background: value`. */
+  bg(value: Properties["background"]) {
+    return this.add("background", value);
+  }
+  /** Sets `backgroundImage: value`. */
+  bgImage(value: Properties["backgroundImage"]) {
+    return this.add("backgroundImage", value);
+  }
+  /** Sets `backgroundSize: value`. */
+  bgSize(value: Properties["backgroundSize"]) {
+    return this.add("backgroundSize", value);
+  }
+  /** Sets `backgroundPosition: value`. */
+  bgPosition(value: Properties["backgroundPosition"]) {
+    return this.add("backgroundPosition", value);
+  }
+  /** Sets `backgroundRepeat: "no-repeat"`. */
+  get bgNoRepeat() {
+    return this.add("backgroundRepeat", "no-repeat");
+  }
+  /** Sets `backgroundRepeat: value`. */
+  bgRepeat(value: Properties["backgroundRepeat"]) {
+    return this.add("backgroundRepeat", value);
+  }
+  /** Sets `backgroundClip: "text"; WebkitBackgroundClip: "text"`. */
+  get bgClipText() {
+    return this.add("backgroundClip", "text").add("WebkitBackgroundClip", "text");
+  }
+  /** Sets `backgroundClip: value`. */
+  bgClip(value: Properties["backgroundClip"]) {
+    return this.add("backgroundClip", value);
+  }
+
   // border
   /** Sets `borderStyle: "solid"; borderWidth: "1px"`. */
   get ba() {
@@ -169,7 +229,7 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
 
   // borderColor
   /** Sets `borderColor: "var(--bg)"`. */
-  get bcBg() {
+  get bcPage() {
     return this.add("borderColor", "var(--bg)");
   }
   /** Sets `borderColor: "var(--surface)"`. */
@@ -292,6 +352,22 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   bc(value: Properties["borderColor"]) {
     return this.add("borderColor", value);
   }
+  /** Sets `borderTopColor: value`. */
+  btc(value: Properties["borderTopColor"]) {
+    return this.add("borderTopColor", value);
+  }
+  /** Sets `borderRightColor: value`. */
+  brc(value: Properties["borderRightColor"]) {
+    return this.add("borderRightColor", value);
+  }
+  /** Sets `borderBottomColor: value`. */
+  bbc(value: Properties["borderBottomColor"]) {
+    return this.add("borderBottomColor", value);
+  }
+  /** Sets `borderLeftColor: value`. */
+  blc(value: Properties["borderLeftColor"]) {
+    return this.add("borderLeftColor", value);
+  }
 
   // borderRadius
   /** Sets `borderRadius: "2px"`. */
@@ -391,6 +467,26 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `boxShadow: value`. */
   boxShadow(value: Properties["boxShadow"]) {
     return this.add("boxShadow", value);
+  }
+
+  // breaks
+  /** Sets `breakInside: "avoid"`. */
+  get breakAvoid() {
+    return this.add("breakInside", "avoid");
+  }
+  /** Sets `breakInside: value`. */
+  breakInside(value: Properties["breakInside"]) {
+    return this.add("breakInside", value);
+  }
+  /** Sets `breakAfter: value`. */
+  breakAfter(value: Properties["breakAfter"]) {
+    return this.add("breakAfter", value);
+  }
+
+  // clipPath
+  /** Sets `clipPath: value`. */
+  clipPath(value: Properties["clipPath"]) {
+    return this.add("clipPath", value);
   }
 
   // container
@@ -528,6 +624,34 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   leftPx(px: number) {
     return this.add("left", `${px}px`);
   }
+  /** Sets `inset: "calc(var(--t-spacing) * 0)"`. */
+  get inset0() {
+    return this.add("inset", "calc(var(--t-spacing) * 0)");
+  }
+  /** Sets `inset: "calc(var(--t-spacing) * 1)"`. */
+  get inset1() {
+    return this.add("inset", "calc(var(--t-spacing) * 1)");
+  }
+  /** Sets `inset: "calc(var(--t-spacing) * 2)"`. */
+  get inset2() {
+    return this.add("inset", "calc(var(--t-spacing) * 2)");
+  }
+  /** Sets `inset: "calc(var(--t-spacing) * 3)"`. */
+  get inset3() {
+    return this.add("inset", "calc(var(--t-spacing) * 3)");
+  }
+  /** Sets `inset: "calc(var(--t-spacing) * 4)"`. */
+  get inset4() {
+    return this.add("inset", "calc(var(--t-spacing) * 4)");
+  }
+  /** Sets `inset: "v"`. */
+  inset(v: number | string) {
+    return this.add("inset", maybeInc(v));
+  }
+  /** Sets `inset: px`. */
+  insetPx(px: number) {
+    return this.add("inset", `${px}px`);
+  }
 
   // cursor
   /** Sets `cursor: "pointer"`. */
@@ -599,6 +723,16 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `display: value`. */
   display(value: Properties["display"]) {
     return this.add("display", value);
+  }
+
+  // filter
+  /** Sets `filter: value`. */
+  filter(value: Properties["filter"]) {
+    return this.add("filter", value);
+  }
+  /** Sets `backdropFilter: value`. */
+  backdropFilter(value: Properties["backdropFilter"]) {
+    return this.add("backdropFilter", value);
   }
 
   // flexbox
@@ -1070,6 +1204,10 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   gc(value: Properties["gridColumn"]) {
     return this.add("gridColumn", value);
   }
+  /** Sets `gridArea: value`. */
+  ga(value: Properties["gridArea"]) {
+    return this.add("gridArea", value);
+  }
   /** Sets `gridAutoRows: value`. */
   gar(value: Properties["gridAutoRows"]) {
     return this.add("gridAutoRows", value);
@@ -1360,6 +1498,22 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     ).add("textOverflow", "ellipsis");
   }
 
+  // listStyle
+  /** Sets `listStyle: "none"`. */
+  get listNone() {
+    return this.add("listStyle", "none");
+  }
+  /** Sets `listStyle: value`. */
+  listStyle(value: Properties["listStyle"]) {
+    return this.add("listStyle", value);
+  }
+
+  // mask
+  /** Sets `maskImage: value`. */
+  maskImage(value: Properties["maskImage"]) {
+    return this.add("maskImage", value);
+  }
+
   // objectFit
   /** Sets `objectFit: "contain"`. */
   get objectContain() {
@@ -1384,6 +1538,10 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `objectFit: value`. */
   objectFit(value: Properties["objectFit"]) {
     return this.add("objectFit", value);
+  }
+  /** Sets `objectPosition: value`. */
+  objectPosition(value: Properties["objectPosition"]) {
+    return this.add("objectPosition", value);
   }
 
   // opacity
@@ -1428,6 +1586,22 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `outline: value`. */
   outline(value: Properties["outline"]) {
     return this.add("outline", value);
+  }
+  /** Sets `outlineColor: value`. */
+  outlineColor(value: Properties["outlineColor"]) {
+    return this.add("outlineColor", value);
+  }
+  /** Sets `outlineOffset: value`. */
+  outlineOffset(value: Properties["outlineOffset"]) {
+    return this.add("outlineOffset", value);
+  }
+  /** Sets `outlineStyle: value`. */
+  outlineStyle(value: Properties["outlineStyle"]) {
+    return this.add("outlineStyle", value);
+  }
+  /** Sets `outlineWidth: value`. */
+  outlineWidth(value: Properties["outlineWidth"]) {
+    return this.add("outlineWidth", value);
   }
 
   // overflow
@@ -1492,6 +1666,20 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     return this.add("overflowX", value);
   }
 
+  // pointerEvents
+  /** Sets `pointerEvents: "none"`. */
+  get pen() {
+    return this.add("pointerEvents", "none");
+  }
+  /** Sets `pointerEvents: "auto"`. */
+  get pea() {
+    return this.add("pointerEvents", "auto");
+  }
+  /** Sets `pointerEvents: value`. */
+  pe(value: Properties["pointerEvents"]) {
+    return this.add("pointerEvents", value);
+  }
+
   // position
   /** Sets `position: "absolute"`. */
   get absolute() {
@@ -1516,6 +1704,158 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `position: value`. */
   position(value: Properties["position"]) {
     return this.add("position", value);
+  }
+
+  // resize
+  /** Sets `resize: "none"`. */
+  get resizeNone() {
+    return this.add("resize", "none");
+  }
+  /** Sets `resize: value`. */
+  resize(value: Properties["resize"]) {
+    return this.add("resize", value);
+  }
+
+  // scroll
+  /** Sets `scrollMarginTop: "calc(var(--t-spacing) * 0)"`. */
+  get smt0() {
+    return this.add("scrollMarginTop", "calc(var(--t-spacing) * 0)");
+  }
+  /** Sets `scrollMarginTop: "calc(var(--t-spacing) * 1)"`. */
+  get smt1() {
+    return this.add("scrollMarginTop", "calc(var(--t-spacing) * 1)");
+  }
+  /** Sets `scrollMarginTop: "calc(var(--t-spacing) * 2)"`. */
+  get smt2() {
+    return this.add("scrollMarginTop", "calc(var(--t-spacing) * 2)");
+  }
+  /** Sets `scrollMarginTop: "calc(var(--t-spacing) * 3)"`. */
+  get smt3() {
+    return this.add("scrollMarginTop", "calc(var(--t-spacing) * 3)");
+  }
+  /** Sets `scrollMarginTop: "calc(var(--t-spacing) * 4)"`. */
+  get smt4() {
+    return this.add("scrollMarginTop", "calc(var(--t-spacing) * 4)");
+  }
+  /** Sets `scrollMarginTop: "v"`. */
+  smt(v: number | string) {
+    return this.add("scrollMarginTop", maybeInc(v));
+  }
+  /** Sets `scrollMarginTop: px`. */
+  smtPx(px: number) {
+    return this.add("scrollMarginTop", `${px}px`);
+  }
+  /** Sets `scrollMarginRight: "calc(var(--t-spacing) * 0)"`. */
+  get smr0() {
+    return this.add("scrollMarginRight", "calc(var(--t-spacing) * 0)");
+  }
+  /** Sets `scrollMarginRight: "calc(var(--t-spacing) * 1)"`. */
+  get smr1() {
+    return this.add("scrollMarginRight", "calc(var(--t-spacing) * 1)");
+  }
+  /** Sets `scrollMarginRight: "calc(var(--t-spacing) * 2)"`. */
+  get smr2() {
+    return this.add("scrollMarginRight", "calc(var(--t-spacing) * 2)");
+  }
+  /** Sets `scrollMarginRight: "calc(var(--t-spacing) * 3)"`. */
+  get smr3() {
+    return this.add("scrollMarginRight", "calc(var(--t-spacing) * 3)");
+  }
+  /** Sets `scrollMarginRight: "calc(var(--t-spacing) * 4)"`. */
+  get smr4() {
+    return this.add("scrollMarginRight", "calc(var(--t-spacing) * 4)");
+  }
+  /** Sets `scrollMarginRight: "v"`. */
+  smr(v: number | string) {
+    return this.add("scrollMarginRight", maybeInc(v));
+  }
+  /** Sets `scrollMarginRight: px`. */
+  smrPx(px: number) {
+    return this.add("scrollMarginRight", `${px}px`);
+  }
+  /** Sets `scrollMarginBottom: "calc(var(--t-spacing) * 0)"`. */
+  get smb0() {
+    return this.add("scrollMarginBottom", "calc(var(--t-spacing) * 0)");
+  }
+  /** Sets `scrollMarginBottom: "calc(var(--t-spacing) * 1)"`. */
+  get smb1() {
+    return this.add("scrollMarginBottom", "calc(var(--t-spacing) * 1)");
+  }
+  /** Sets `scrollMarginBottom: "calc(var(--t-spacing) * 2)"`. */
+  get smb2() {
+    return this.add("scrollMarginBottom", "calc(var(--t-spacing) * 2)");
+  }
+  /** Sets `scrollMarginBottom: "calc(var(--t-spacing) * 3)"`. */
+  get smb3() {
+    return this.add("scrollMarginBottom", "calc(var(--t-spacing) * 3)");
+  }
+  /** Sets `scrollMarginBottom: "calc(var(--t-spacing) * 4)"`. */
+  get smb4() {
+    return this.add("scrollMarginBottom", "calc(var(--t-spacing) * 4)");
+  }
+  /** Sets `scrollMarginBottom: "v"`. */
+  smb(v: number | string) {
+    return this.add("scrollMarginBottom", maybeInc(v));
+  }
+  /** Sets `scrollMarginBottom: px`. */
+  smbPx(px: number) {
+    return this.add("scrollMarginBottom", `${px}px`);
+  }
+  /** Sets `scrollMarginLeft: "calc(var(--t-spacing) * 0)"`. */
+  get sml0() {
+    return this.add("scrollMarginLeft", "calc(var(--t-spacing) * 0)");
+  }
+  /** Sets `scrollMarginLeft: "calc(var(--t-spacing) * 1)"`. */
+  get sml1() {
+    return this.add("scrollMarginLeft", "calc(var(--t-spacing) * 1)");
+  }
+  /** Sets `scrollMarginLeft: "calc(var(--t-spacing) * 2)"`. */
+  get sml2() {
+    return this.add("scrollMarginLeft", "calc(var(--t-spacing) * 2)");
+  }
+  /** Sets `scrollMarginLeft: "calc(var(--t-spacing) * 3)"`. */
+  get sml3() {
+    return this.add("scrollMarginLeft", "calc(var(--t-spacing) * 3)");
+  }
+  /** Sets `scrollMarginLeft: "calc(var(--t-spacing) * 4)"`. */
+  get sml4() {
+    return this.add("scrollMarginLeft", "calc(var(--t-spacing) * 4)");
+  }
+  /** Sets `scrollMarginLeft: "v"`. */
+  sml(v: number | string) {
+    return this.add("scrollMarginLeft", maybeInc(v));
+  }
+  /** Sets `scrollMarginLeft: px`. */
+  smlPx(px: number) {
+    return this.add("scrollMarginLeft", `${px}px`);
+  }
+  /** Sets `scrollPadding: value`. */
+  scrollPadding(value: Properties["scrollPadding"]) {
+    return this.add("scrollPadding", value);
+  }
+  /** Sets `scrollPaddingInline: value`. */
+  scrollPaddingInline(value: Properties["scrollPaddingInline"]) {
+    return this.add("scrollPaddingInline", value);
+  }
+  /** Sets `scrollPaddingBlock: value`. */
+  scrollPaddingBlock(value: Properties["scrollPaddingBlock"]) {
+    return this.add("scrollPaddingBlock", value);
+  }
+  /** Sets `scrollBehavior: "smooth"`. */
+  get scrollSmooth() {
+    return this.add("scrollBehavior", "smooth");
+  }
+  /** Sets `scrollBehavior: value`. */
+  scrollBehavior(value: Properties["scrollBehavior"]) {
+    return this.add("scrollBehavior", value);
+  }
+  /** Sets `overscrollBehavior: "contain"`. */
+  get overscrollContain() {
+    return this.add("overscrollBehavior", "contain");
+  }
+  /** Sets `overscrollBehavior: value`. */
+  overscrollBehavior(value: Properties["overscrollBehavior"]) {
+    return this.add("overscrollBehavior", value);
   }
 
   // scrollSnap
@@ -1548,7 +1888,7 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
 
   // skins
   /** Sets `color: "var(--bg)"`. */
-  get bg() {
+  get page() {
     return this.add("color", "var(--bg)");
   }
   /** Sets `color: "var(--surface)"`. */
@@ -1672,7 +2012,7 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     return this.add("color", value);
   }
   /** Sets `backgroundColor: "var(--bg)"`. */
-  get bgBg() {
+  get bgPage() {
     return this.add("backgroundColor", "var(--bg)");
   }
   /** Sets `backgroundColor: "var(--surface)"`. */
@@ -1796,7 +2136,7 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     return this.add("backgroundColor", value);
   }
   /** Sets `fill: "var(--bg)"`. */
-  get fBg() {
+  get fPage() {
     return this.add("fill", "var(--bg)");
   }
   /** Sets `fill: "var(--surface)"`. */
@@ -1918,6 +2258,14 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `fill: value`. */
   fill(value: Properties["fill"]) {
     return this.add("fill", value);
+  }
+  /** Sets `accentColor: value`. */
+  accentColor(value: Properties["accentColor"]) {
+    return this.add("accentColor", value);
+  }
+  /** Sets `caretColor: value`. */
+  caretColor(value: Properties["caretColor"]) {
+    return this.add("caretColor", value);
   }
 
   // spacing
@@ -2387,6 +2735,20 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     );
   }
 
+  // table
+  /** Sets `borderCollapse: value`. */
+  borderCollapse(value: Properties["borderCollapse"]) {
+    return this.add("borderCollapse", value);
+  }
+  /** Sets `borderSpacing: value`. */
+  borderSpacing(value: Properties["borderSpacing"]) {
+    return this.add("borderSpacing", value);
+  }
+  /** Sets `tableLayout: value`. */
+  tableLayout(value: Properties["tableLayout"]) {
+    return this.add("tableLayout", value);
+  }
+
   // textAlign
   /** Sets `textAlign: "left"`. */
   get tal() {
@@ -2449,6 +2811,20 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
     return this.add("textTransform", value);
   }
 
+  // touchAction
+  /** Sets `touchAction: "none"`. */
+  get touchNone() {
+    return this.add("touchAction", "none");
+  }
+  /** Sets `touchAction: "pan-y"`. */
+  get touchPanY() {
+    return this.add("touchAction", "pan-y");
+  }
+  /** Sets `touchAction: value`. */
+  touchAction(value: Properties["touchAction"]) {
+    return this.add("touchAction", value);
+  }
+
   // transform
   /** Sets `backfaceVisibility: value`. */
   backfaceVisibility(value: Properties["backfaceVisibility"]) {
@@ -2490,31 +2866,23 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   translate(value: Properties["translate"]) {
     return this.add("translate", value);
   }
+  /** Sets `willChange: value`. */
+  willChange(value: Properties["willChange"]) {
+    return this.add("willChange", value);
+  }
 
   // transition
-  /** Sets `transition: value`. */
-  transition(value: Properties["transition"]) {
-    return this.add("transition", value);
+  /** Sets `transition: "background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s"`. */
+  get transition() {
+    return this.add("transition", "background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s");
   }
-  /** Sets `transitionBehavior: value`. */
-  transitionBehavior(value: Properties["transitionBehavior"]) {
-    return this.add("transitionBehavior", value);
+  /** Sets `transition: "background-color 0.12s"`. */
+  get transitionFast() {
+    return this.add("transition", "background-color 0.12s");
   }
-  /** Sets `transitionDelay: value`. */
-  transitionDelay(value: Properties["transitionDelay"]) {
-    return this.add("transitionDelay", value);
-  }
-  /** Sets `transitionDuration: value`. */
-  transitionDuration(value: Properties["transitionDuration"]) {
-    return this.add("transitionDuration", value);
-  }
-  /** Sets `transitionProperty: value`. */
-  transitionProperty(value: Properties["transitionProperty"]) {
-    return this.add("transitionProperty", value);
-  }
-  /** Sets `transitionTimingFunction: value`. */
-  transitionTimingFunction(value: Properties["transitionTimingFunction"]) {
-    return this.add("transitionTimingFunction", value);
+  /** Sets `transition: "background-color 0.18s, transform 0.18s"`. */
+  get transitionSlow() {
+    return this.add("transition", "background-color 0.18s, transform 0.18s");
   }
 
   // typeScale
@@ -2578,6 +2946,14 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   get f19() {
     return this.add("fontSize", "19px");
   }
+  /** Sets `fontSize: "23px"`. */
+  get f23() {
+    return this.add("fontSize", "23px");
+  }
+  /** Sets `fontSize: "25px"`. */
+  get f25() {
+    return this.add("fontSize", "25px");
+  }
   /** Sets `fontSize: "28px"`. */
   get f28() {
     return this.add("fontSize", "28px");
@@ -2627,6 +3003,38 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `lineHeight: px`. */
   lhPx(px: number) {
     return this.lh(`${px}px`);
+  }
+  /** Sets `letterSpacing: value`. */
+  ls(value: Properties["letterSpacing"]) {
+    return this.add("letterSpacing", value);
+  }
+  /** Sets `letterSpacing: px`. */
+  lsPx(px: number) {
+    return this.ls(`${px}px`);
+  }
+  /** Sets `textWrap: "balance"`. */
+  get twb() {
+    return this.add("textWrap", "balance");
+  }
+  /** Sets `textWrap: "pretty"`. */
+  get twp() {
+    return this.add("textWrap", "pretty");
+  }
+  /** Sets `textWrap: value`. */
+  tw(value: Properties["textWrap"]) {
+    return this.add("textWrap", value);
+  }
+  /** Sets `fontVariantNumeric: "tabular-nums"`. */
+  get tabularNums() {
+    return this.add("fontVariantNumeric", "tabular-nums");
+  }
+  /** Sets `fontVariantNumeric: value`. */
+  fontVariantNumeric(value: Properties["fontVariantNumeric"]) {
+    return this.add("fontVariantNumeric", value);
+  }
+  /** Sets `content: value`. */
+  content(value: Properties["content"]) {
+    return this.add("content", value);
   }
 
   // userSelect
@@ -2932,10 +3340,6 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   }
 
   // fontFamily
-  /** Sets `fontFamily: "\"Inter\", system-ui, sans-serif"`. */
-  get fontBody() {
-    return this.add("fontFamily", '"Inter", system-ui, sans-serif');
-  }
   /** Sets `fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"`. */
   get fontMono() {
     return this.add(
@@ -2952,10 +3356,6 @@ class CssBuilder<T extends Properties, S extends StyleKind = "buildtime"> {
   /** Sets `outlineColor: "var(--accent)"`. */
   get ocAccent() {
     return this.add("outlineColor", "var(--accent)");
-  }
-  /** Sets `outlineColor: value`. */
-  outlineColor(value: Properties["outlineColor"]) {
-    return this.add("outlineColor", value);
   }
 
   // gradients
@@ -3331,7 +3731,7 @@ function omitUndefinedValues<T extends object>(value: T): T {
 }
 
 export enum Palette {
-  Bg = "var(--bg)",
+  Page = "var(--bg)",
   Surface = "var(--surface)",
   Surface2 = "var(--surface2)",
   Surface3 = "var(--surface3)",

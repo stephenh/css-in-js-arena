@@ -265,13 +265,12 @@ const s = {
   input: Css.w100
     .pyPx(8)
     .pxPx(11)
-    .bgSurface.ba.bcBorderStrong.br6.f13_5.text.shadowNone.add("outlineStyle", "none")
-    .transitionProperty("border-color, box-shadow")
-    .transitionDuration("0.15s")
+    .bgSurface.ba.bcBorderStrong.br6.f13_5.text.shadowNone.outlineStyle("none")
+    .transition
     .onFocus.bcAccent.shadowRing.end.element("::placeholder").faint.o100.$,
   inputError: Css.bcDanger.shadowNone.onFocus.bcDanger.shadowRingDanger.$,
-  select: Css.add("appearance", "none").prPx(24).$,
-  textarea: Css.mhPx(80).add("resize", "vertical").$,
+  select: Css.appearanceNone.prPx(24).$,
+  textarea: Css.mhPx(80).resize("vertical").$,
   hint: Css.f12.faint.$,
   error: Css.f12.danger.fw5.$,
 
@@ -287,20 +286,18 @@ const s = {
   // The knob and the checked state live in settings.css.ts — a `Css` chain can
   // only style its own element, so the preceding-sibling rule is a selector
   // there and this class is its anchor.
-  switchTrack: Css.db.w100.h100.brPill.bgBorderStrong.add("pointerEvents", "none")
-    .transitionProperty("background-color")
-    .transitionDuration("0.18s")
+  switchTrack: Css.db.w100.h100.brPill.bgBorderStrong.pen
+    .transitionSlow
     .className("switchTrack").$,
 
   radioCards: Css.dg.gapPx(10).$,
   radioCard: Css.df.aifs
     .gapPx(11)
     .pPx(13)
-    .ba.bcBorderStrong.br10.cursorPointer.transitionProperty("border-color, background-color")
-    .transitionDuration("0.15s")
+    .ba.bcBorderStrong.br10.cursorPointer.transition
     .className("radioCard")
     .onHover.bcAccent.$,
-  radioInput: Css.mtPx(2).add("accentColor", "var(--accent)").fs0.cursorPointer.$,
+  radioInput: Css.mtPx(2).accentColor("var(--accent)").fs0.cursorPointer.$,
   radioName: Css.db.f13_5.fw6.$,
   radioDesc: Css.db.f12_5.muted.mtPx(2).$,
 
@@ -312,6 +309,6 @@ const s = {
     .gapPx(14)
     .fww.pyPx(12)
     .pxPx(16)
-    .bgSurfaceGlassStrong.add("backdropFilter", "blur(10px)")
+    .bgSurfaceGlassStrong.backdropFilter("blur(10px)")
     .ba.bcBorder.br10.shadowMd.f12_5.muted.$,
 };

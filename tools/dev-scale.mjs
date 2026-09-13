@@ -71,7 +71,7 @@ const EDIT = {
   bamboo: { from: `export const pageTitle = css({ fontSize: "25px"`, mk: (v) => `export const pageTitle = css({ fontSize: "${v}px"` },
   panda: { from: `export const pageTitle = css({ fontSize: "25px"`, mk: (v) => `export const pageTitle = css({ fontSize: "${v}px"` },
   stylex: { from: `pageTitle: { fontSize: 25,`, mk: (v) => `pageTitle: { fontSize: ${v},` },
-  truss: { from: `export const pageTitle = Css.fsPx(25)`, mk: (v) => `export const pageTitle = Css.fsPx(${v})` },
+  truss: { from: `export const pageTitle = Css.f25`, mk: (v) => `export const pageTitle = Css.fsPx(${v})` },
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

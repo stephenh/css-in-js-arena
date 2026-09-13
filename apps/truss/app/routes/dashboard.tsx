@@ -221,14 +221,13 @@ const s = {
   kpi: Css.df.fdc
     .gapPx(10)
     .pPx(16)
-    .bgSurface.ba.bcBorder.br14.shadowSm.transitionProperty("border-color, box-shadow")
-    .transitionDuration("0.15s")
+    .bgSurface.ba.bcBorder.br14.shadowSm.transition
     .onHover.bcBorderStrong.shadowMd.$,
   kpiLabel: Css.f12_5.fw5.muted.$,
-  kpiValue: Css.fsPx(23)
+  kpiValue: Css.f23
     .fw(650)
-    .add("letterSpacing", "-0.025em")
-    .add("fontVariantNumeric", "tabular-nums").$,
+    .ls("-0.025em")
+    .tabularNums.$,
   kpiFoot: Css.df.aife.jcsb.gapPx(10).$,
   spark: Css.db.$,
   sparkUp: Css.success.$,
