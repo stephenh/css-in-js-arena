@@ -12,6 +12,7 @@ Each engine gets a port pair by its index in `tools/engines.json` — `300N` for
 | StyleX | `@stylexjs/unplugin` | 3002 | 4002 |
 | Panda CSS | `@pandacss/postcss` | 3003 | 4003 |
 | Truss | `@homebound/truss/plugin` | 3004 | 4004 |
+| Tailwind | `@tailwindcss/vite` | 3005 | 4005 |
 
 `tools/engines.json` is the single source of truth for that list. Adding an engine is a checklist —
 see [`CLAUDE.md`](./CLAUDE.md).
@@ -42,6 +43,7 @@ cd apps/bamboo && PORT=3001 npm start
 cd apps/stylex && PORT=3002 npm start
 cd apps/panda  && PORT=3003 npm start
 cd apps/truss  && PORT=3004 npm start
+cd apps/tailwind && PORT=3005 npm start
 ```
 
 ## Verify parity — the gate
@@ -81,7 +83,7 @@ node unused.mjs     # class rules that can never apply
 Kill the servers first; CPU contention skews the timings.
 
 ```bash
-lsof -ti:3001,3002,3003,3004 | xargs kill
+lsof -ti:3001,3002,3003,3004,3005 | xargs kill
 
 cd tools
 RUNS=5 ./timings.sh   # production build, cold and warm
