@@ -53,7 +53,7 @@ cd apps/tailwind && PORT=3005 npm start
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss tailwind; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
@@ -64,7 +64,10 @@ worst case of ≈0.047% — that residual is the footer credit line, which diffe
 Two things that are easy to get wrong:
 
 - `layout-diff.mjs` takes the challenger as its **fourth** argument and defaults to `stylex`. A loop
-  without it never geometry-checks Panda or Truss at all.
+  without it never geometry-checks Panda, Truss or Tailwind at all.
+- Both tools launch Playwright's `chrome` channel, which needs Google Chrome installed locally.
+  Without it, set `BROWSER_CHANNEL=chromium` to use the build Playwright ships — the browser only has
+  to be the same for every app within one run.
 - Both tools freeze CSS animations before measuring, because `getBoundingClientRect()` reports the
   transformed box and `/lab` animates. Without that the gate fails at random.
 
@@ -223,6 +226,7 @@ ls apps/*/app/__scale.ts 2>/dev/null              # generated module must be gon
 ls apps/*/app/__orphan.ts 2>/dev/null             # ditto
 find apps/*/styled-system/themes -type f          # no leftover theme artifacts
 grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
+grep -n "data-theme" apps/tailwind/app/app.css    # generated Tailwind themes must be gone
 ```
 
 Rebuild each app afterwards too. An interrupted probe can leave `build/` holding a stylesheet that no
