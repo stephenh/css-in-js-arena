@@ -87,6 +87,7 @@ cd apps/bamboo && PORT=3001 npm start &
 cd apps/stylex && PORT=3002 npm start &
 cd apps/panda  && PORT=3003 npm start &
 cd apps/truss  && PORT=3004 npm start &
+cd apps/tailwind && PORT=3005 npm start &
 ```
 
 ### 3. Verify parity — gate
@@ -94,13 +95,17 @@ cd apps/truss  && PORT=3004 npm start &
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss tailwind; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
 
 Note the fourth argument: `layout-diff.mjs` defaults to `stylex`, so a loop without it never
-geometry-checks Panda or Truss at all.
+geometry-checks Panda, Truss or Tailwind at all.
+
+`layout-diff.mjs` and `compare.mjs` launch Playwright's `chrome` channel, which needs Google
+Chrome installed. On a machine without it, set `BROWSER_CHANNEL=chromium` to use the build
+Playwright ships; the browser only has to be the same for every app in a run.
 
 `layout-diff.mjs` freezes animations before it probes. `getBoundingClientRect()` reports the
 *transformed* box, so `/lab`'s spinner and pulsing dot otherwise make the geometry depend on which
@@ -123,7 +128,7 @@ node unused.mjs       # class rules that can never apply
 Kill the servers first; CPU contention skews timings.
 
 ```bash
-lsof -ti:3001,3002,3003,3004 | xargs kill
+lsof -ti:3001,3002,3003,3004,3005 | xargs kill
 RUNS=5 ./timings.sh   # production build, cold and warm
 RUNS=3 ./devstart.sh  # dev server cold start
 ./deadcode.sh         # delete a page, see what happens to the CSS
@@ -144,7 +149,7 @@ cd tools && node hmr-phases.mjs 4 5
 
 One driver. It starts and stops every dev server itself, reverses the engine order on alternate
 sweeps, and pools the result — do not drive servers by hand and do not run anything else meanwhile.
-Budget ~25 minutes.
+Budget ~30 minutes at five engines.
 
 It reports **phases**, not one end-to-end number, because one number was measuring the wrong event.
 The probe this replaced polled `getComputedStyle` until it differed from the previous value, and
@@ -279,6 +284,7 @@ git status                                        # clean apart from README.md
 grep -rnw "acent\|padingBlock\|leterSpacing" apps/*/app/ui.ts   # must return nothing (-w: "adjacent" is not a hit)
 grep -rn "tools/theming.mjs" apps/*/app/          # generated themes must be gone
 grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
+grep -n "data-theme" apps/tailwind/app/app.css      # generated Tailwind themes must be gone
 ls apps/*/app/__scale.ts 2>/dev/null                # scale.mjs module must be gone
 ls apps/*/app/__orphan.ts 2>/dev/null               # orphan.mjs module must be gone
 ls -d apps/*/app/__devscale 2>/dev/null             # dev-scale.mjs module tree must be gone

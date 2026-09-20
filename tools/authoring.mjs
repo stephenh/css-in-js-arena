@@ -26,8 +26,15 @@ const CALL = /(?:\b(?:css|cva|sva)\s*\(\s*\{)|(?:stylex\.(?:create|defineVars|cr
 const CHAIN_OPEN = /\bCss\./;
 const CHAIN_CLOSE = /\.\$/;
 
+// Tailwind: a `cva()` recipe, a `const` bound to a class string, or the
+// `const s = { … }` / `const schemes = { … }` map of them.
+const TW_OPEN = /^(?:export\s+)?const\s+(?:[\w$]+(?:\s*:\s*[^=]+?)?\s*=\s*(?:cva\(|")|(?:s|schemes)(?:\s*:\s*[^=]+?)?\s*=\s*\{)/;
+const TW_CONTINUED = /^(?:export\s+)?const\s+[\w$]+(?:\s*:\s*[^=]+?)?\s*=\s*$/;
+const TW_VALUE = /^\s*"/;
+
 function styleLines(file) {
   if (file.includes("/apps/truss/")) return trussStyleLines(file);
+  if (file.includes("/apps/tailwind/")) return tailwindStyleLines(file);
   let src;
   try {
     src = readFileSync(file, "utf8");
@@ -74,6 +81,45 @@ function trussStyleLines(file) {
   return count;
 }
 
+/**
+ * Non-blank lines that define a Tailwind style.
+ *
+ * A Tailwind style is a plain class string, so there is no call to bracket the
+ * way `css({ … })` brackets a Bamboo one. Three shapes count: a `cva()` recipe,
+ * a `const` bound to a class string, and the `const s = { … }` map of class
+ * strings at the foot of a route. `schemes` in root.tsx is that same map under
+ * another name. Records that hold non-style values — `nextTheme`, `themeIcon` —
+ * are not matched, so they stay out of the count.
+ */
+function tailwindStyleLines(file) {
+  let src;
+  try {
+    src = readFileSync(file, "utf8");
+  } catch {
+    return 0;
+  }
+  let depth = 0;
+  let inBlock = false;
+  let pending = false;
+  let count = 0;
+  for (const line of src.split("\n")) {
+    if (!inBlock && (TW_OPEN.test(line) || (pending && TW_VALUE.test(line)))) {
+      inBlock = true;
+      depth = 0;
+    }
+    // `export const cardHead =` wraps its string onto the next line.
+    pending = !inBlock && TW_CONTINUED.test(line);
+    if (!inBlock) continue;
+    if (line.trim() !== "") count++;
+    for (const ch of line) {
+      if (ch === "(" || ch === "{") depth++;
+      if (ch === ")" || ch === "}") depth--;
+    }
+    if (depth <= 0 && /;\s*$/.test(line)) inBlock = false;
+  }
+  return count;
+}
+
 const styling = {
   bamboo: {
     "bamboo.config.ts (tokens)": countLines(join(ROOT, "apps/bamboo/bamboo.config.ts")),
@@ -100,6 +146,18 @@ const styling = {
       ["settings", "pricing", "docs", "lab"].map((r) => [
         `routes/${r}.css.ts`,
         countLines(join(ROOT, `apps/truss/app/routes/${r}.css.ts`)),
+      ]),
+    ),
+  },
+  tailwind: {
+    "app.css (tokens + base)": countLines(join(ROOT, "apps/tailwind/app/app.css")),
+    "cn.ts (tailwind-merge config)": countLines(join(ROOT, "apps/tailwind/app/cn.ts")),
+    "ui.ts (recipes)": styleLines(join(ROOT, "apps/tailwind/app/ui.ts")),
+    // Selectors no utility can express live beside their route.
+    ...Object.fromEntries(
+      ["settings", "pricing", "docs", "lab"].map((r) => [
+        `routes/${r}.css`,
+        countLines(join(ROOT, `apps/tailwind/app/routes/${r}.css`)),
       ]),
     ),
   },

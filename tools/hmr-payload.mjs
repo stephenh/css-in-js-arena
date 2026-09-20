@@ -30,12 +30,17 @@ const C = {
     from: `export const pageTitle = Css.f25`,
     to: `export const pageTitle = Css.fsPx(41)`,
   },
+  tailwind: {
+    file: `${ROOT}apps/tailwind/app/ui.ts`,
+    from: `export const pageTitle = "text-25`,
+    to: `export const pageTitle = "text-[41px]`,
+  },
 }[app];
 
 const original = readFileSync(C.file, "utf8");
 if (!original.includes(C.from)) { console.error("anchor not found"); process.exit(1); }
 
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
 await page.goto(`http://localhost:${port}/`, { waitUntil: "networkidle" });
 await page.waitForTimeout(800);

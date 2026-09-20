@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-const b = await chromium.launch({ channel: "chrome" });
+const b = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 for (const [name, port] of [["bamboo", 3001], ["stylex", 3002]]) {
   // OS preference is LIGHT; use the in-app button to request dark.
   const ctx = await b.newContext({ colorScheme: "light", viewport: { width: 1280, height: 800 } });

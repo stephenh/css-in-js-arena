@@ -37,6 +37,7 @@ probe bamboo app/ui.ts 'color: "accent",' 'color: "acent",'
 probe panda  app/ui.ts 'color: "accent",' 'color: "acent",'
 probe stylex app/ui.ts 'color: t.accent,' 'color: t.acent,'
 probe truss  app/ui.ts '.accent.fw6' '.acent.fw6'
+probe tailwind app/ui.ts 'staging: "bg-accent-soft text-accent",' 'staging: "bg-accent-soft text-acent",'
 
 echo
 echo "=== Typo a CSS property: paddingBlock -> padingBlock ==="
@@ -48,3 +49,6 @@ probe stylex app/ui.ts 'paddingBlock: 8,' 'padingBlock: 8,'
 # abbreviations cover enough that ui.ts has no `add()` left, so the probe moves
 # to a route that still types a property name out.
 probe truss  app/root.tsx 'add("colorScheme", "light dark")' 'add("colorSchema", "light dark")'
+# Tailwind never spells a property out: `py-` is how `paddingBlock` is written,
+# so misspelling the utility prefix is the same class of mistake.
+probe tailwind app/ui.ts 'gap-6 py-8 px-14' 'gap-6 pyy-8 px-14'

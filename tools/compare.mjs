@@ -39,7 +39,7 @@ async function shoot(page, url, file) {
 const results = [];
 
 for (const [scheme] of [["light"], ["dark"]]) {
-  const browser = await chromium.launch({ channel: "chrome" });
+  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 
   for (const [vpName, width, height] of VIEWPORTS) {
     // Only run the full viewport matrix in light mode; dark mode is desktop-only.

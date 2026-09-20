@@ -23,7 +23,7 @@ if (!original.includes(FROM)) {
 }
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const page = await (await browser.newContext()).newPage();
 
 // A dev-server restart drops the socket, so reload rather than trusting HMR.

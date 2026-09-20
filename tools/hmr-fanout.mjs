@@ -61,7 +61,7 @@ const CASES = {
   },
 }[app];
 
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
 await page.goto(`http://localhost:${port}/`, { waitUntil: "networkidle" });
 

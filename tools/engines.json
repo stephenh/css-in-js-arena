@@ -4,6 +4,7 @@
     { "name": "bamboo", "port": 3001, "devPort": 4001 },
     { "name": "stylex", "port": 3002, "devPort": 4002 },
     { "name": "panda",  "port": 3003, "devPort": 4003 },
-    { "name": "truss",  "port": 3004, "devPort": 4004 }
+    { "name": "truss",  "port": 3004, "devPort": 4004 },
+    { "name": "tailwind", "port": 3005, "devPort": 4005 }
   ]
 }

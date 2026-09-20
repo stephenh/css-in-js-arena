@@ -59,6 +59,7 @@ const generated = {
   truss: (i) =>
     `import { Css } from "~/Css";\n\n` +
     `export const m${i} = Css.ptPx(17).pbPx(19).mtPx(23).add("letterSpacing", "0.037em").$;\n`,
+  tailwind: (i) => `export const m${i} = "pt-17 pb-19 mt-23 tracking-[0.037em]";\n`,
 };
 
 const DIR = "app/__devscale";
@@ -72,6 +73,7 @@ const EDIT = {
   panda: { from: `export const pageTitle = css({ fontSize: "25px"`, mk: (v) => `export const pageTitle = css({ fontSize: "${v}px"` },
   stylex: { from: `pageTitle: { fontSize: 25,`, mk: (v) => `pageTitle: { fontSize: ${v},` },
   truss: { from: `export const pageTitle = Css.f25`, mk: (v) => `export const pageTitle = Css.fsPx(${v})` },
+  tailwind: { from: `export const pageTitle = "text-25`, mk: (v) => `export const pageTitle = "text-[${v}px]` },
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

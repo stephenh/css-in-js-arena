@@ -35,7 +35,7 @@ if (!original.includes(TARGET.from)) {
   process.exit(1);
 }
 
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const page = await (await browser.newContext()).newPage();
 page.on("console", (m) => {
   if (m.type() === "error") console.log("  [browser error]", m.text().slice(0, 150));

@@ -37,7 +37,7 @@ const probe = () => {
   return out;
 };
 
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
 

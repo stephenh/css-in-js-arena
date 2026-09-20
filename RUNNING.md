@@ -12,6 +12,7 @@ Each engine gets a port pair by its index in `tools/engines.json` — `300N` for
 | StyleX | `@stylexjs/unplugin` | 3002 | 4002 |
 | Panda CSS | `@pandacss/postcss` | 3003 | 4003 |
 | Truss | `@homebound/truss/plugin` | 3004 | 4004 |
+| Tailwind | `@tailwindcss/vite` | 3005 | 4005 |
 
 `tools/engines.json` is the single source of truth for that list. Adding an engine is a checklist —
 see [`CLAUDE.md`](./CLAUDE.md).
@@ -42,6 +43,7 @@ cd apps/bamboo && PORT=3001 npm start
 cd apps/stylex && PORT=3002 npm start
 cd apps/panda  && PORT=3003 npm start
 cd apps/truss  && PORT=3004 npm start
+cd apps/tailwind && PORT=3005 npm start
 ```
 
 ## Verify parity — the gate
@@ -51,7 +53,7 @@ cd apps/truss  && PORT=3004 npm start
 ```bash
 cd tools
 for r in / /projects /settings /pricing /docs /lab; do
-  for c in stylex panda truss; do node layout-diff.mjs "$r" 2 "$c"; done
+  for c in stylex panda truss tailwind; do node layout-diff.mjs "$r" 2 "$c"; done
 done
 node compare.mjs
 ```
@@ -62,7 +64,10 @@ worst case of ≈0.047% — that residual is the footer credit line, which diffe
 Two things that are easy to get wrong:
 
 - `layout-diff.mjs` takes the challenger as its **fourth** argument and defaults to `stylex`. A loop
-  without it never geometry-checks Panda or Truss at all.
+  without it never geometry-checks Panda, Truss or Tailwind at all.
+- Both tools launch Playwright's `chrome` channel, which needs Google Chrome installed locally.
+  Without it, set `BROWSER_CHANNEL=chromium` to use the build Playwright ships — the browser only has
+  to be the same for every app within one run.
 - Both tools freeze CSS animations before measuring, because `getBoundingClientRect()` reports the
   transformed box and `/lab` animates. Without that the gate fails at random.
 
@@ -81,7 +86,7 @@ node unused.mjs     # class rules that can never apply
 Kill the servers first; CPU contention skews the timings.
 
 ```bash
-lsof -ti:3001,3002,3003,3004 | xargs kill
+lsof -ti:3001,3002,3003,3004,3005 | xargs kill
 
 cd tools
 RUNS=5 ./timings.sh   # production build, cold and warm
@@ -221,6 +226,7 @@ ls apps/*/app/__scale.ts 2>/dev/null              # generated module must be gon
 ls apps/*/app/__orphan.ts 2>/dev/null             # ditto
 find apps/*/styled-system/themes -type f          # no leftover theme artifacts
 grep -n "data-theme" apps/truss/app/theme.css.ts  # generated Truss themes must be gone
+grep -n "data-theme" apps/tailwind/app/app.css    # generated Tailwind themes must be gone
 ```
 
 Rebuild each app afterwards too. An interrupted probe can leave `build/` holding a stylesheet that no
