@@ -188,7 +188,7 @@ const DETECTOR = function (args) {
 };
 
 // ------------------------------------------------------------------ node side
-const browser = await chromium.launch({ channel: "chrome" });
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL ?? "chrome" });
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
 await ctx.addInitScript(INIT);
 const page = await ctx.newPage();

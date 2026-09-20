@@ -55,6 +55,20 @@ export const CASES = {
       base: 25, first: 41, sel: "h1",
     },
   },
+  tailwind: {
+    leaf: {
+      file: `${ROOT}apps/tailwind/app/routes/dashboard.tsx`,
+      from: `  kpiValue: "text-23`,
+      mk: (v) => `  kpiValue: "text-[${v}px]`,
+      base: 23, first: 31, sel: "article span + span",
+    },
+    shared: {
+      file: `${ROOT}apps/tailwind/app/ui.ts`,
+      from: `export const pageTitle = "text-25`,
+      mk: (v) => `export const pageTitle = "text-[${v}px]`,
+      base: 25, first: 41, sel: "h1",
+    },
+  },
   truss: {
     leaf: {
       file: `${ROOT}apps/truss/app/routes/dashboard.tsx`,

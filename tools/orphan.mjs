@@ -59,7 +59,18 @@ const generated = {
     `export const orphanStyles = [\n` +
     Array.from({ length: n }, (_, i) => `  ${trussChain(i)},`).join("\n") +
     `\n];\n`,
+  // Tailwind reads source text, not the bundle graph: a module nothing imports
+  // is still scanned, so its classes still ship.
+  tailwind: (n) =>
+    `export const orphanStyles = [\n` +
+    Array.from({ length: n }, (_, i) => `  "${tailwindClasses(i)}",`).join("\n") +
+    `\n];\n`,
 };
+
+/** Same utilities scale.mjs generates, so the two measurements line up. */
+const tailwindClasses = (n) =>
+  `pt-${100 + n} pb-${200 + n} mt-${300 + n} ` +
+  `border-t-${(n % 900) + 1000} text-[${(n % 700) + 2000}px] tracking-[${(n % 500) + 3000}px]`;
 
 /** The DECLS set as a Truss chain, i.e. `Css.ptPx(100).pbPx(200).mtPx(300).add(…).fsPx(2000).add(…).$`. */
 const trussChain = (n) =>

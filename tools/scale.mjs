@@ -70,6 +70,13 @@ const generated = {
     `export const scaleStyles = [\n` +
     Array.from({ length: n }, (_, i) => `  ${trussChain(i)},`).join("\n") +
     `\n];\n`,
+  // Tailwind styles are class strings, so the same six declarations become one
+  // string per definition. Its scanner reads any source file in the project,
+  // imported or not.
+  tailwind: (n) =>
+    `export const scaleStyles = [\n` +
+    Array.from({ length: n }, (_, i) => `  "${tailwindClasses(i)}",`).join("\n") +
+    `\n];\n`,
 };
 
 /** The DECLS set as a Truss chain, i.e. `Css.ptPx(100).pbPx(200).mtPx(300).add(…).fsPx(2000).add(…).$`. */
@@ -77,6 +84,13 @@ const trussChain = (n) =>
   `Css.ptPx(${100 + n}).pbPx(${200 + n}).mtPx(${300 + n})` +
   `.add("borderTopWidth", "${(n % 900) + 1000}px").fsPx(${(n % 700) + 2000})` +
   `.add("letterSpacing", "${(n % 500) + 3000}px").$`;
+
+/** The DECLS set as Tailwind utilities. The app sets `--spacing: 1px`, so the
+ *  three spacing values are scale steps; the other three have no scale and are
+ *  arbitrary values, which is how a Tailwind user would write them. */
+const tailwindClasses = (n) =>
+  `pt-${100 + n} pb-${200 + n} mt-${300 + n} ` +
+  `border-t-${(n % 900) + 1000} text-[${(n % 700) + 2000}px] tracking-[${(n % 500) + 3000}px]`;
 
 const MODULE = "app/__scale.ts";
 
